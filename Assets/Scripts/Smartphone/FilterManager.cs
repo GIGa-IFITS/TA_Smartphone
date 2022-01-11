@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+/* SCRIPT UNTUK APLIKASI DI SMARTPHONE */
 public class FilterManager : MonoBehaviour
 {
     public static FilterManager instance;
