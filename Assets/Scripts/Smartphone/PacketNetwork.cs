@@ -15,7 +15,7 @@ public enum ServerPackets
     sendCommand,
     sendFilterSummary,
     sendResearcherId,
-    // sendNodeRequest
+    sendNodeRequest
     // sendDashboardData
 }
 

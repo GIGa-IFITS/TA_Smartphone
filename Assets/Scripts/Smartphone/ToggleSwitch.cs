@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+/* SCRIPT UNTUK APLIKASI DI SMARTPHONE */
 public class ToggleSwitch : MonoBehaviour
 {
     [SerializeField] private RectTransform uiHandleRectTransform;
