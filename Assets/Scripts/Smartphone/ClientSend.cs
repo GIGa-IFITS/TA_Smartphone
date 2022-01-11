@@ -80,15 +80,15 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    // public static void SendNodeRequest(string _id, string _tagName){
-    //     using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendNodeRequest)){
-    //         _packet.Write(Client.instance.myId);
-    //         _packet.Write(_id);
-    //         _packet.Write(_tagName);
+    public static void SendNodeRequest(string _id, string _tagName){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendNodeRequest)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_id);
+            _packet.Write(_tagName);
 
-    //         SendTCPData(_packet);
-    //     }
-    // }
+            SendTCPData(_packet);
+        }
+    }
 
     // public static void RequestForTexture(){
     //     using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.requestForTexture)){

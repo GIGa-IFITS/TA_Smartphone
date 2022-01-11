@@ -16,10 +16,11 @@ public class FilterManager : MonoBehaviour
     private TextMeshProUGUI summaryFilterText;
     private TextMeshProUGUI summaryNameText;
     private TextMeshProUGUI summaryTotalText;
+    private TextMeshProUGUI summaryVariableText;
     private TextMeshProUGUI summaryInstructionText;
     private TextMeshProUGUI detFilterText;
     private TextMeshProUGUI detNameText;
-    private TextMeshProUGUI detBirthText;
+    //private TextMeshProUGUI detBirthText;
     private TextMeshProUGUI detFacultyText;
     private TextMeshProUGUI detDeptText;
     private TextMeshProUGUI detJournalText;
@@ -31,6 +32,11 @@ public class FilterManager : MonoBehaviour
     // private Stack<string> nodeTag;
     // private Stack<string> nodeId;
     public TextMeshProUGUI debuggingText;
+    private string currId;
+    private string currFilter;
+    private string currTag;
+    [SerializeField] private GameObject detailPanel;
+    [SerializeField] private GameObject detailErrorPanel;
 
     private void Awake()
     {
@@ -57,12 +63,13 @@ public class FilterManager : MonoBehaviour
         summaryFilterText = summaryMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         summaryNameText = summaryMenu.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
         summaryTotalText = summaryMenu.transform.GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
+        summaryVariableText = summaryMenu.transform.GetChild(3).GetChild(2).GetComponent<TextMeshProUGUI>();
         summaryInstructionText = summaryMenu.transform.GetChild(3).GetChild(3).GetComponent<TextMeshProUGUI>();
 
         // detail page
         detFilterText = detailMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         detNameText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detBirthText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
+        //detBirthText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
         detFacultyText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
         detDeptText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>();
 
@@ -78,6 +85,9 @@ public class FilterManager : MonoBehaviour
         filterMenu.SetActive(false);
         summaryMenu.SetActive(false);
         illustMenu.SetActive(true);
+
+        currFilter = _filter;
+        currTag = "none";
 
         if(_filter == "name"){
             illustFilterText.text = "Filtering By:" + "\n" + "Researcher Name";
@@ -119,6 +129,12 @@ public class FilterManager : MonoBehaviour
         summaryNameText.text = _name;
         summaryTotalText.text = _total.ToString();
 
+        if(_filterName == "Research Keyword"){
+            summaryVariableText.text = "Publications";
+        }else{
+            summaryVariableText.text = "Researchers";
+        }
+
         if(_tag == "ListPenelitiFakultas"){
             summaryInstructionText.text = "Try knocking your phone to nearby node to view researchers of the departement.";
         }
@@ -128,6 +144,8 @@ public class FilterManager : MonoBehaviour
         else{
             summaryInstructionText.text = "Try knocking your phone to nearby node to view detail of the researcher.";
         }
+
+        currTag = _tag;
 
         // nodeTag.Push(_tag);
         // nodeId.Push(_nodeId);
@@ -150,13 +168,21 @@ public class FilterManager : MonoBehaviour
         detailMenu.SetActive(true);
 
         detFilterText.text = "Filtering By:" + "\n" + _filterName;
+        currId = _id;
 
         NetworkUIManager.instance.GetResearcherDetailData(_id);
     }
 
+    public void RefreshResearcherDetail(){
+        detailPanel.SetActive(true);
+        detailErrorPanel.SetActive(false);
+
+        NetworkUIManager.instance.GetResearcherDetailData(currId);
+    }
+
     public void UpdateResearcherDetail(List<string> detailData){
         detNameText.text = detailData[0];
-        detBirthText.text = detailData[1];
+        //detBirthText.text = detailData[1];
         detFacultyText.text = detailData[2];
         detDeptText.text = detailData[3];
         detJournalText.text = detailData[4];
@@ -188,6 +214,17 @@ public class FilterManager : MonoBehaviour
         filterMenu.SetActive(true);
 
         ClientSend.SendTexture();
+    }
+
+    public void BackToPreviousNode(){
+        if(currTag == "ListPenelitiFakultas" || currTag == "ListPublikasiFakultas"){
+            // still in summary menu, send current tag and node id
+            ClientSend.SendNodeRequest(currId, currTag);
+        }
+        else{
+            // back to illust menu
+            OnTapFilter(currFilter);
+        }
     }
 
     // public void BackToPreviousNode(){

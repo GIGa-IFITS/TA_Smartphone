@@ -13,6 +13,10 @@ public class NetworkUIManager : MonoBehaviour {
     [SerializeField] private GameObject filterMenu;
     [SerializeField] private GameObject settingsMenu;
     [SerializeField] private GameObject connectButton;
+    [SerializeField] private GameObject dashboardPanel;
+    [SerializeField] private GameObject dashboardErrorPanel;
+    [SerializeField] private GameObject detailPanel;
+    [SerializeField] private GameObject detailErrorPanel;
     private TextMeshProUGUI connectButtonText;
     [SerializeField] private GameObject failText;
     [SerializeField] private Camera renderCamera;
@@ -75,7 +79,7 @@ public class NetworkUIManager : MonoBehaviour {
         Client.instance.ConnectToServer();
 
         // change text to connecting.., set color to black / blue?; then wait
-        WaitForNSeconds(5);
+        WaitForNSeconds(3);
     }
 
     IEnumerator WaitForNSeconds(float n)
@@ -101,6 +105,8 @@ public class NetworkUIManager : MonoBehaviour {
     }
 
     public void OnTapDashboardMenu(){
+        dashboardPanel.SetActive(true);
+        dashboardErrorPanel.SetActive(false);
         dashboardMenu.SetActive(true);
 
         // get dashboard data
@@ -113,7 +119,8 @@ public class NetworkUIManager : MonoBehaviour {
         }, (error) => {
             if (error != "")
             {
-                // handle error
+                dashboardPanel.SetActive(false);
+                dashboardErrorPanel.SetActive(true);
             }
         }));
 
@@ -146,7 +153,8 @@ public class NetworkUIManager : MonoBehaviour {
         }, (error) => {
             if (error != "")
             {
-                
+                detailPanel.SetActive(false);
+                detailErrorPanel.SetActive(true);
             }
         }));
     }
