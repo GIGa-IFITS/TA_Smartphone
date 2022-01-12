@@ -96,13 +96,14 @@ public class ClientHandle : MonoBehaviour
         FilterManager.instance.ShowResearcherDetail(_id, _filterName);
     }
 
-    // public static void NodeRequestReceived(PacketNetwork _packet){
-    //     string _id = _packet.ReadString();
-    //     string _tagName = _packet.ReadString();
+    public static void NodeRequestReceived(PacketNetwork _packet){
+        // for vr
+        // string _id = _packet.ReadString();
+        // string _tagName = _packet.ReadString();
 
-    //     // update smartphone screen
-    //     VirtualSmartphone.instance.ChangeNode(_id, _tagName);
-    // }
+        // // update smartphone screen
+        // VirtualSmartphone.instance.PreviousNode(_id, _tagName);
+    }
 
     // receive request for texture message from server
     // public static void TextureRequested(PacketNetwork _packet){

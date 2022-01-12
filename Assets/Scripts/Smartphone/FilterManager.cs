@@ -70,8 +70,8 @@ public class FilterManager : MonoBehaviour
         detFilterText = detailMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         detNameText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
         //detBirthText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detFacultyText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detDeptText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detFacultyText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detDeptText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
 
         detJournalText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
         detConferenceText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
@@ -144,8 +144,10 @@ public class FilterManager : MonoBehaviour
         else{
             summaryInstructionText.text = "Try knocking your phone to nearby node to view detail of the researcher.";
         }
-
+        currId = _nodeId;
         currTag = _tag;
+
+        debuggingText.text = currId + currTag;
 
         // nodeTag.Push(_tag);
         // nodeId.Push(_nodeId);
