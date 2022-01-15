@@ -32,9 +32,12 @@ public class FilterManager : MonoBehaviour
     // private Stack<string> nodeTag;
     // private Stack<string> nodeId;
     public TextMeshProUGUI debuggingText;
-    private string currId;
+    private string prevNodeName;
+    private string prevNodeTotal;
+    private string prevNodeId;
     private string currFilter;
     private string currTag;
+    private string tempId;
     [SerializeField] private GameObject detailPanel;
     [SerializeField] private GameObject detailErrorPanel;
 
@@ -105,17 +108,6 @@ public class FilterManager : MonoBehaviour
             illustFilterText.text = "Filtering By:" + "\n" + "Research Keyword";
             illustInstructionText.text = "Try knocking your phone to nearby node to view research keywords of the faculty.";
         }
-        // nodeTag.Push(_filter);
-        // nodeId.Push("-1");
-
-        // foreach( string tag in nodeTag )
-        // {
-        //     debuggingText.text += tag;
-        // }
-        // foreach( string id in nodeId )
-        // {
-        //     debuggingText.text += id;
-        // }
 
         ClientSend.SendCommand(_filter);
         ClientSend.SendTexture();
@@ -137,29 +129,22 @@ public class FilterManager : MonoBehaviour
 
         if(_tag == "ListPenelitiFakultas"){
             summaryInstructionText.text = "Try knocking your phone to nearby node to view researchers of the departement.";
+            prevNodeName = _name;
+            prevNodeId = _nodeId;
+            prevNodeTotal = _total.ToString();
         }
         else if(_tag == "ListPublikasiFakultas"){
             summaryInstructionText.text = "Try knocking your phone to nearby node to view researchers with research keyword.";
+            prevNodeName = _name;
+            prevNodeId = _nodeId;
+            prevNodeTotal = _total.ToString();
         }
         else{
             summaryInstructionText.text = "Try knocking your phone to nearby node to view detail of the researcher.";
         }
-        currId = _nodeId;
         currTag = _tag;
 
-        debuggingText.text = currId + currTag;
-
-        // nodeTag.Push(_tag);
-        // nodeId.Push(_nodeId);
-
-        // foreach( string tag in nodeTag )
-        // {
-        //     debuggingText.text += tag;
-        // }
-        // foreach( string id in nodeId )
-        // {
-        //     debuggingText.text += id;
-        // }
+        debuggingText.text = prevNodeName + prevNodeId + currTag;
 
         Handheld.Vibrate();
         ClientSend.SendTexture();
@@ -170,7 +155,7 @@ public class FilterManager : MonoBehaviour
         detailMenu.SetActive(true);
 
         detFilterText.text = "Filtering By:" + "\n" + _filterName;
-        currId = _id;
+        tempId = _id;
 
         NetworkUIManager.instance.GetResearcherDetailData(_id);
     }
@@ -179,7 +164,7 @@ public class FilterManager : MonoBehaviour
         detailPanel.SetActive(true);
         detailErrorPanel.SetActive(false);
 
-        NetworkUIManager.instance.GetResearcherDetailData(currId);
+        NetworkUIManager.instance.GetResearcherDetailData(tempId);
     }
 
     public void UpdateResearcherDetail(List<string> detailData){
@@ -219,43 +204,25 @@ public class FilterManager : MonoBehaviour
     }
 
     public void BackToPreviousNode(){
-        if(currTag == "ListPenelitiFakultas" || currTag == "ListPublikasiFakultas"){
-            // still in summary menu, send current tag and node id
-            ClientSend.SendNodeRequest(currId, currTag);
+        if(currTag == "ListPenelitiDepartemen" || currTag == "ListPublikasiKataKunci"){
+            // still in summary menu, send prev id, current tag
+            ClientSend.SendNodeRequest(prevNodeId, currTag);
+
+            summaryNameText.text = prevNodeName;
+            summaryTotalText.text = prevNodeTotal;
+
+            if(currTag == "ListPenelitiDepartemen"){
+                currTag = "ListPenelitiFakultas";
+            }
+            else if(currTag == "ListPublikasiKataKunci"){
+                currTag = "ListPublikasiFakultas";
+            }
+            Handheld.Vibrate();
+            ClientSend.SendTexture();
         }
         else{
             // back to illust menu
             OnTapFilter(currFilter);
         }
     }
-
-    // public void BackToPreviousNode(){
-    //     nodeTag.Pop();
-    //     nodeId.Pop();
-
-    //     foreach( string tag in nodeTag )
-    //     {
-    //         debuggingText.text += tag;
-    //     }
-    //     foreach( string id in nodeId )
-    //     {
-    //         debuggingText.text += id;
-    //     }
-
-    //     // back to illust menu
-    //     if (nodeId.Peek() == "-1"){
-    //         string filter = nodeTag.Peek();
-    //         nodeTag.Pop();
-    //         nodeId.Pop();
-    //         OnTapFilter(filter);
-    //     }else{
-    //         string _nodeId = nodeId.Peek();
-    //         string _nodeTag = nodeTag.Peek();
-    //         ClientSend.SendNodeRequest(_nodeId, _nodeTag);
-    //         nodeId.Pop();
-    //         nodeTag.Pop();
-    //     }
-
-    //     ClientSend.SendTexture();
-    // }
 }

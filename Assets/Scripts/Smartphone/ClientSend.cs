@@ -80,10 +80,10 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void SendNodeRequest(string _id, string _tagName){
+    public static void SendNodeRequest(string _nodeId, string _tagName){
         using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendNodeRequest)){
             _packet.Write(Client.instance.myId);
-            _packet.Write(_id);
+            _packet.Write(_nodeId);
             _packet.Write(_tagName);
 
             SendTCPData(_packet);

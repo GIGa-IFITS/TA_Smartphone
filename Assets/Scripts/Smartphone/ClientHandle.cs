@@ -98,11 +98,11 @@ public class ClientHandle : MonoBehaviour
 
     public static void NodeRequestReceived(PacketNetwork _packet){
         // for vr
-        // string _id = _packet.ReadString();
+        // string _nodeId = _packet.ReadString();
         // string _tagName = _packet.ReadString();
 
         // // update smartphone screen
-        // VirtualSmartphone.instance.PreviousNode(_id, _tagName);
+        // VirtualSmartphone.instance.PreviousNode(_nodeId, _tagName);
     }
 
     // receive request for texture message from server

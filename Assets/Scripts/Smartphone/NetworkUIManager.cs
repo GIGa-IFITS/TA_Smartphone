@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Networking;
-
+/* SCRIPT UNTUK APLIKASI DI SMARTPHONE */
 public class NetworkUIManager : MonoBehaviour {
     public static NetworkUIManager instance;
     [SerializeField] private TMP_InputField ipField;
@@ -33,6 +33,7 @@ public class NetworkUIManager : MonoBehaviour {
     TextMeshProUGUI thesis;
     TextMeshProUGUI patents;
     TextMeshProUGUI research;
+    public TextMeshProUGUI debuggingText;
     private void Awake()
     {
         if (instance == null)
@@ -74,18 +75,20 @@ public class NetworkUIManager : MonoBehaviour {
 
     public void ConnectToServer()
     {
+        debuggingText.text = "status " + connectSuccess.ToString() + "\n";
         failText.SetActive(false);
         connectButtonText.text = "Connect";
+        WaitForNSeconds(3f);
         Client.instance.ConnectToServer();
-
-        // change text to connecting.., set color to black / blue?; then wait
-        WaitForNSeconds(3);
     }
 
     IEnumerator WaitForNSeconds(float n)
     {
+        debuggingText.text = "kepanggil\n";
         yield return new WaitForSeconds(n);
+        debuggingText.text = "2status " + connectSuccess.ToString() + "\n";
         if(!connectSuccess){
+            debuggingText.text = "should active!";
             failText.SetActive(true);
             connectButtonText.text = "Retry";
         } 
