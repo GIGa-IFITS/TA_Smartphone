@@ -15,10 +15,9 @@ public class NetworkUIManager : MonoBehaviour {
     [SerializeField] private GameObject connectButton;
     [SerializeField] private GameObject dashboardPanel;
     [SerializeField] private GameObject dashboardErrorPanel;
-    [SerializeField] private GameObject detailPanel;
-    [SerializeField] private GameObject detailErrorPanel;
+    [SerializeField] private GameObject dashboardLoading;
     private TextMeshProUGUI connectButtonText;
-    [SerializeField] private GameObject failText;
+    [SerializeField] private TextMeshProUGUI detailText;
     [SerializeField] private Camera renderCamera;
     private Texture2D textureToSend2D;
     private bool connectSuccess;
@@ -27,12 +26,12 @@ public class NetworkUIManager : MonoBehaviour {
     RequestHandler requestPeneliti = new RequestHandler();
     private string URL = "https://127.0.0.5:5000";
     // dashboard text
-    TextMeshProUGUI journals;
-    TextMeshProUGUI conferences;
-    TextMeshProUGUI books;
-    TextMeshProUGUI thesis;
-    TextMeshProUGUI patents;
-    TextMeshProUGUI research;
+    private TextMeshProUGUI journals;
+    private TextMeshProUGUI conferences;
+    private TextMeshProUGUI books;
+    private TextMeshProUGUI thesis;
+    private TextMeshProUGUI patents;
+    private TextMeshProUGUI research;
     public TextMeshProUGUI debuggingText;
     private void Awake()
     {
@@ -53,13 +52,12 @@ public class NetworkUIManager : MonoBehaviour {
         connectSuccess = false;
         connectButtonText = connectButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        journals = dashboardMenu.transform.GetChild(2).GetChild(2).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
-        conferences = dashboardMenu.transform.GetChild(2).GetChild(2).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
-        books = dashboardMenu.transform.GetChild(2).GetChild(2).GetChild(2).GetChild(2).GetComponent<TextMeshProUGUI>();
-        thesis = dashboardMenu.transform.GetChild(2).GetChild(2).GetChild(2).GetChild(3).GetComponent<TextMeshProUGUI>();
-        patents = dashboardMenu.transform.GetChild(2).GetChild(2).GetChild(2).GetChild(4).GetComponent<TextMeshProUGUI>();
-        research = dashboardMenu.transform.GetChild(2).GetChild(2).GetChild(2).GetChild(5).GetComponent<TextMeshProUGUI>();
-
+        journals = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
+        conferences = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
+        books = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(2).GetComponent<TextMeshProUGUI>();
+        thesis = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(3).GetComponent<TextMeshProUGUI>();
+        patents = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(4).GetComponent<TextMeshProUGUI>();
+        research = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(5).GetComponent<TextMeshProUGUI>();
     }
 
     // to connect to VR
@@ -75,22 +73,25 @@ public class NetworkUIManager : MonoBehaviour {
 
     public void ConnectToServer()
     {
-        debuggingText.text = "status " + connectSuccess.ToString() + "\n";
-        failText.SetActive(false);
+        detailText.gameObject.SetActive(true);
+        detailText.text = "Connecting...";
+        detailText.color = new Color32(50, 59, 89, 255);
         connectButtonText.text = "Connect";
-        WaitForNSeconds(3f);
+        connectButton.GetComponent<Button>().interactable = false;
+        ipField.interactable = false;
+        StartCoroutine(WaitForNSeconds(1f));
         Client.instance.ConnectToServer();
     }
 
     IEnumerator WaitForNSeconds(float n)
     {
-        debuggingText.text = "kepanggil\n";
         yield return new WaitForSeconds(n);
-        debuggingText.text = "2status " + connectSuccess.ToString() + "\n";
         if(!connectSuccess){
-            debuggingText.text = "should active!";
-            failText.SetActive(true);
-            connectButtonText.text = "Retry";
+            detailText.text = "Fail to connect";
+            detailText.color = new Color32(231, 65, 65, 255);
+            connectButtonText.text = "Try Again";
+            connectButton.GetComponent<Button>().interactable = true;
+            ipField.interactable = true;
         } 
     }
 
@@ -108,10 +109,12 @@ public class NetworkUIManager : MonoBehaviour {
     }
 
     public void OnTapDashboardMenu(){
-        dashboardPanel.SetActive(true);
+        Debug.Log("tap!");
+        dashboardLoading.SetActive(true);
+        dashboardPanel.SetActive(false);
         dashboardErrorPanel.SetActive(false);
         dashboardMenu.SetActive(true);
-
+      
         // get dashboard data
         requestPeneliti.URL = URL;
         StartCoroutine(requestPeneliti.RequestData((result) =>
@@ -122,7 +125,8 @@ public class NetworkUIManager : MonoBehaviour {
         }, (error) => {
             if (error != "")
             {
-                dashboardPanel.SetActive(false);
+                Debug.Log("fail!");
+                dashboardLoading.SetActive(false);
                 dashboardErrorPanel.SetActive(true);
             }
         }));
@@ -132,6 +136,9 @@ public class NetworkUIManager : MonoBehaviour {
 
     private void hasilPublikasiITS(RawData rawdata)
     {
+        Debug.Log("get!");
+        dashboardPanel.SetActive(true);
+        dashboardLoading.SetActive(false);
         journals.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[0].journals.ToString();
         conferences.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[1].conferences.ToString();
         books.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[2].books.ToString();
@@ -156,8 +163,7 @@ public class NetworkUIManager : MonoBehaviour {
         }, (error) => {
             if (error != "")
             {
-                detailPanel.SetActive(false);
-                detailErrorPanel.SetActive(true);
+                FilterManager.instance.ErrorResearcherDetail();
             }
         }));
     }

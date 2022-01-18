@@ -40,6 +40,7 @@ public class FilterManager : MonoBehaviour
     private string tempId;
     [SerializeField] private GameObject detailPanel;
     [SerializeField] private GameObject detailErrorPanel;
+    [SerializeField] private GameObject detailLoading;
 
     private void Awake()
     {
@@ -55,9 +56,6 @@ public class FilterManager : MonoBehaviour
     }
 
     private void Start(){
-
-        // nodeTag = new Stack<string>();
-        // nodeId = new Stack<string>();
         // filter illust page
         illustFilterText = illustMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         illustInstructionText = illustMenu.transform.GetChild(3).GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -71,17 +69,17 @@ public class FilterManager : MonoBehaviour
 
         // detail page
         detFilterText = detailMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        detNameText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
-        //detBirthText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detFacultyText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detDeptText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(0).GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detNameText = detailPanel.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
+        //detBirthText = detailPanel.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detFacultyText = detailPanel.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detDeptText = detailPanel.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
 
-        detJournalText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detConferenceText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detBookText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detThesisText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detPatentText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>();
-        detResearchText = detailMenu.transform.GetChild(3).GetChild(1).GetChild(1).GetChild(1).GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detJournalText = detailPanel.transform.GetChild(1).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detConferenceText = detailPanel.transform.GetChild(1).GetChild(1).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detBookText = detailPanel.transform.GetChild(1).GetChild(1).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detThesisText = detailPanel.transform.GetChild(1).GetChild(1).GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detPatentText = detailPanel.transform.GetChild(1).GetChild(1).GetChild(4).GetChild(1).GetComponent<TextMeshProUGUI>();
+        detResearchText = detailPanel.transform.GetChild(1).GetChild(1).GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>();
     }
 
     public void OnTapFilter(string _filter){
@@ -153,21 +151,29 @@ public class FilterManager : MonoBehaviour
     public void ShowResearcherDetail(string _id, string _filterName){
         summaryMenu.SetActive(false);
         detailMenu.SetActive(true);
+        detailLoading.SetActive(true);
+        detailPanel.SetActive(false);
+        detailErrorPanel.SetActive(false);
 
         detFilterText.text = "Filtering By:" + "\n" + _filterName;
         tempId = _id;
 
         NetworkUIManager.instance.GetResearcherDetailData(_id);
+        Handheld.Vibrate();
+        ClientSend.SendTexture();
     }
 
     public void RefreshResearcherDetail(){
-        detailPanel.SetActive(true);
+        detailLoading.SetActive(true);
         detailErrorPanel.SetActive(false);
-
+        ClientSend.SendTexture();
         NetworkUIManager.instance.GetResearcherDetailData(tempId);
     }
 
     public void UpdateResearcherDetail(List<string> detailData){
+        detailLoading.SetActive(false);
+        detailPanel.SetActive(true);
+
         detNameText.text = detailData[0];
         //detBirthText.text = detailData[1];
         detFacultyText.text = detailData[2];
@@ -179,7 +185,14 @@ public class FilterManager : MonoBehaviour
         detPatentText.text = detailData[8];
         detResearchText.text = detailData[9];
 
-        Handheld.Vibrate();
+        ClientSend.SendTexture();
+    }
+
+    public void ErrorResearcherDetail(){
+        detailErrorPanel.SetActive(true);
+        detailPanel.SetActive(false);
+        detailLoading.SetActive(false);
+
         ClientSend.SendTexture();
     }
 
