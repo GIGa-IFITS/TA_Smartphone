@@ -142,7 +142,7 @@ public class FilterManager : MonoBehaviour
         }
         currTag = _tag;
 
-        debuggingText.text = prevNodeName + prevNodeId + currTag;
+        //debuggingText.text = prevNodeName + prevNodeId + currTag;
 
         Handheld.Vibrate();
         ClientSend.SendTexture();
@@ -165,6 +165,7 @@ public class FilterManager : MonoBehaviour
 
     public void RefreshResearcherDetail(){
         detailLoading.SetActive(true);
+        detailPanel.SetActive(false);
         detailErrorPanel.SetActive(false);
         ClientSend.SendTexture();
         NetworkUIManager.instance.GetResearcherDetailData(tempId);
@@ -173,6 +174,7 @@ public class FilterManager : MonoBehaviour
     public void UpdateResearcherDetail(List<string> detailData){
         detailLoading.SetActive(false);
         detailPanel.SetActive(true);
+        detailErrorPanel.SetActive(false);
 
         detNameText.text = detailData[0];
         //detBirthText.text = detailData[1];
@@ -189,9 +191,9 @@ public class FilterManager : MonoBehaviour
     }
 
     public void ErrorResearcherDetail(){
-        detailErrorPanel.SetActive(true);
-        detailPanel.SetActive(false);
         detailLoading.SetActive(false);
+        detailPanel.SetActive(false);
+        detailErrorPanel.SetActive(true);
 
         ClientSend.SendTexture();
     }
@@ -205,9 +207,6 @@ public class FilterManager : MonoBehaviour
 
     public void BackToFilterMenu(){
         ClientSend.SendCommand("destroy");
-
-        // nodeTag.Clear();
-        // nodeId.Clear();
 
         illustMenu.SetActive(false);
         summaryMenu.SetActive(false);

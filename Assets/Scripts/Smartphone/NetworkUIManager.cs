@@ -114,6 +114,7 @@ public class NetworkUIManager : MonoBehaviour {
         dashboardPanel.SetActive(false);
         dashboardErrorPanel.SetActive(false);
         dashboardMenu.SetActive(true);
+        ClientSend.SendTexture();
       
         // get dashboard data
         requestPeneliti.URL = URL;
@@ -128,10 +129,9 @@ public class NetworkUIManager : MonoBehaviour {
                 Debug.Log("fail!");
                 dashboardLoading.SetActive(false);
                 dashboardErrorPanel.SetActive(true);
+                ClientSend.SendTexture();
             }
-        }));
-
-        ClientSend.SendTexture();
+        }));   
     }
 
     private void hasilPublikasiITS(RawData rawdata)
