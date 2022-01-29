@@ -153,7 +153,8 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.sendCommand, ClientHandle.CommandReceived },
             { (int)ServerPackets.sendFilterSummary, ClientHandle.FilterSummaryReceived },
             { (int)ServerPackets.sendResearcherId, ClientHandle.ResearcherIdReceived },
-            { (int)ServerPackets.sendNodeRequest, ClientHandle.NodeRequestReceived }
+            { (int)ServerPackets.sendNodeRequest, ClientHandle.NodeRequestReceived },
+            { (int)ServerPackets.sendErrorMessage, ClientHandle.ErrorMessageReceived }
         };
         Debug.Log("initialized packets");
     }

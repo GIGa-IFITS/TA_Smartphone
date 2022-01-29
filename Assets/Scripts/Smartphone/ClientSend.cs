@@ -80,11 +80,21 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void SendNodeRequest(string _nodeId, string _tagName){
+    public static void SendNodeRequest(string _nodeId, string _nodeId2, string _tagName){
         using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendNodeRequest)){
             _packet.Write(Client.instance.myId);
             _packet.Write(_nodeId);
+            _packet.Write(_nodeId2);
             _packet.Write(_tagName);
+
+            SendTCPData(_packet);
+        }
+    }
+
+    public static void SendErrorMessage(string _errorMsg){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendErrorMessage)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_errorMsg);
 
             SendTCPData(_packet);
         }

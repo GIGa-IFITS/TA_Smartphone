@@ -26,7 +26,6 @@ public class ClientHandle : MonoBehaviour
         float _screenHeight = _packet.ReadFloat();
 
         Debug.Log($"Received phone size from server.");
-        // for vr
         //VirtualSmartphone.instance.UpdatePhoneSize(_screenWidth, _screenHeight);
     }
     
@@ -35,7 +34,6 @@ public class ClientHandle : MonoBehaviour
         byte[] _receivedTexture2D = _packet.ReadBytes(_packet.UnreadLength());
 
         Debug.Log($"Received texture2D from server.");
-        // for vr
         //VirtualSmartphone.instance.CopyTexture2DToRenderTexture(_receivedTexture2D);
     }
 
@@ -44,36 +42,35 @@ public class ClientHandle : MonoBehaviour
         bool _toggleVal = _packet.ReadBool();
 
         Debug.Log($"Received dashboard toggle value from server.");
-        // for vr
         //Manager.instance.Dashboard();
         //Manager.instance.DashboardToggle();
     }
 
-    // receive command from server, for vr
+    // receive command from server
     public static void CommandReceived(PacketNetwork _packet){
         string _command = _packet.ReadString();
 
         Debug.Log($"Received command: " +  _command + " from server.");
-        if (_command == "name"){
-            Debug.Log("Showing researcher name");
-            //Manager.instance.getPenelitiAbjadITS();
-        }
-        else if (_command == "unit"){
-            Debug.Log("Showing institution unit");
-            //Manager.instance.getPenelitiFakultasITS();
-        }
-        else if (_command == "degree"){
-            Debug.Log("Showing academic degree");
-            //Manager.instance.getGelarPenelitiITS();
-        }
-        else if (_command == "keyword"){
-            Debug.Log("Showing research keyword");
-            //Manager.instance.getPublikasiFakultas();
-        }
-        else if (_command == "destroy"){
-            Debug.Log("Destroying node, back to filter menu");
-            //Manager.instance.flushNode();
-        }
+        // if (_command == "name"){
+        //     Debug.Log("Showing researcher name");
+        //     Manager.instance.getPenelitiAbjadITS();
+        // }
+        // else if (_command == "unit"){
+        //     Debug.Log("Showing institution unit");
+        //     Manager.instance.getPenelitiFakultasITS();
+        // }
+        // else if (_command == "degree"){
+        //     Debug.Log("Showing academic degree");
+        //     Manager.instance.getGelarPenelitiITS();
+        // }
+        // else if (_command == "keyword"){
+        //     Debug.Log("Showing research keyword");
+        //     Manager.instance.getPublikasiFakultas();
+        // }
+        // else if (_command == "destroy"){
+        //     Debug.Log("Destroying node, back to filter menu");
+        //     Manager.instance.flushNode();
+        // }
     }
 
     // receive filter summary
@@ -97,12 +94,19 @@ public class ClientHandle : MonoBehaviour
     }
 
     public static void NodeRequestReceived(PacketNetwork _packet){
-        // for vr
-        // string _nodeId = _packet.ReadString();
-        // string _tagName = _packet.ReadString();
+        string _nodeId = _packet.ReadString();
+        string _nodeId2 = _packet.ReadString();
+        string _tagName = _packet.ReadString();
 
-        // // update smartphone screen
-        // VirtualSmartphone.instance.PreviousNode(_nodeId, _tagName);
+        // update node
+        //Manager.instance.GetNode(_nodeId, _nodeId2, _tagName);
+    }
+
+    public static void ErrorMessageReceived(PacketNetwork _packet){
+        string _errorMsg = _packet.ReadString();
+
+        // update smartphone screen
+        FilterManager.instance.ShowErrorScreen(_errorMsg);
     }
 
     // receive request for texture message from server

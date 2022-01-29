@@ -9,7 +9,11 @@ public class FilterManager : MonoBehaviour
     public static FilterManager instance;
     [SerializeField] private GameObject filterMenu;
     [SerializeField] private GameObject illustMenu;
+    [SerializeField] private GameObject illustPanel;
+    [SerializeField] private GameObject illustErrorPanel;
     [SerializeField] private GameObject summaryMenu;
+    [SerializeField] private GameObject summaryPanel;
+    [SerializeField] private GameObject summaryErrorPanel;
     [SerializeField] private GameObject detailMenu;
     private TextMeshProUGUI illustFilterText;
     private TextMeshProUGUI illustInstructionText;
@@ -37,7 +41,9 @@ public class FilterManager : MonoBehaviour
     private string prevNodeId;
     private string currFilter;
     private string currTag;
-    private string tempId;
+    private string currId;
+    private string currId2;
+    private string currResearcherId;
     [SerializeField] private GameObject detailPanel;
     [SerializeField] private GameObject detailErrorPanel;
     [SerializeField] private GameObject detailLoading;
@@ -86,6 +92,8 @@ public class FilterManager : MonoBehaviour
         filterMenu.SetActive(false);
         summaryMenu.SetActive(false);
         illustMenu.SetActive(true);
+        illustPanel.SetActive(true);
+        illustErrorPanel.SetActive(false);
 
         currFilter = _filter;
         currTag = "none";
@@ -114,6 +122,8 @@ public class FilterManager : MonoBehaviour
     public void ShowFilterSummary(string _name, int _total, string _tag, string _nodeId, string _filterName){
         illustMenu.SetActive(false);
         summaryMenu.SetActive(true);
+        summaryPanel.SetActive(true);
+        summaryErrorPanel.SetActive(false);
 
         summaryFilterText.text = "Filtering By:" + "\n" + _filterName;
         summaryNameText.text = _name;
@@ -140,9 +150,15 @@ public class FilterManager : MonoBehaviour
         else{
             summaryInstructionText.text = "Try knocking your phone to nearby node to view detail of the researcher.";
         }
+
+        currId = _nodeId;
         currTag = _tag;
 
-        //debuggingText.text = prevNodeName + prevNodeId + currTag;
+        if(_tag == "ListPublikasiKataKunci"){
+            currId2 = _name;
+        }else{
+            currId2 = "0";
+        }
 
         Handheld.Vibrate();
         ClientSend.SendTexture();
@@ -156,7 +172,7 @@ public class FilterManager : MonoBehaviour
         detailErrorPanel.SetActive(false);
 
         detFilterText.text = "Filtering By:" + "\n" + _filterName;
-        tempId = _id;
+        currResearcherId = _id;
 
         NetworkUIManager.instance.GetResearcherDetailData(_id);
         Handheld.Vibrate();
@@ -168,7 +184,7 @@ public class FilterManager : MonoBehaviour
         detailPanel.SetActive(false);
         detailErrorPanel.SetActive(false);
         ClientSend.SendTexture();
-        NetworkUIManager.instance.GetResearcherDetailData(tempId);
+        NetworkUIManager.instance.GetResearcherDetailData(currResearcherId);
     }
 
     public void UpdateResearcherDetail(List<string> detailData){
@@ -218,23 +234,51 @@ public class FilterManager : MonoBehaviour
     public void BackToPreviousNode(){
         if(currTag == "ListPenelitiDepartemen" || currTag == "ListPublikasiKataKunci"){
             // still in summary menu, send prev id, current tag
-            ClientSend.SendNodeRequest(prevNodeId, currTag);
+            if(currTag == "ListPenelitiDepartemen"){
+                currTag = "ListPenelitiFakultas";
+            }
+            else{
+                currTag = "ListPublikasiFakultas";
+            }
+            currId = prevNodeId;
+
+            ClientSend.SendNodeRequest(currId, "0", currTag);
 
             summaryNameText.text = prevNodeName;
             summaryTotalText.text = prevNodeTotal;
 
-            if(currTag == "ListPenelitiDepartemen"){
-                currTag = "ListPenelitiFakultas";
-            }
-            else if(currTag == "ListPublikasiKataKunci"){
-                currTag = "ListPublikasiFakultas";
-            }
             Handheld.Vibrate();
             ClientSend.SendTexture();
         }
         else{
             // back to illust menu
             OnTapFilter(currFilter);
+        }
+    }
+
+    public void ShowErrorScreen(string _errorMsg){
+        Debug.Log(_errorMsg);
+
+        if(illustMenu.activeSelf){
+            illustErrorPanel.SetActive(true);
+            illustPanel.SetActive(false);
+        }else{
+            summaryErrorPanel.SetActive(true);
+            summaryPanel.SetActive(false);
+        }
+        ClientSend.SendTexture();
+    }
+
+    public void RetryFilter(){
+        if(currTag == "none"){
+            // illust menu
+            OnTapFilter(currFilter);
+        }else{
+            // summary menu
+            ClientSend.SendNodeRequest(currId, currId2, currTag);
+            summaryPanel.SetActive(true);
+            summaryErrorPanel.SetActive(false);
+            ClientSend.SendTexture();
         }
     }
 }
