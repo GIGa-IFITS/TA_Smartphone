@@ -14,6 +14,7 @@ public class Client : MonoBehaviour
     public int port = 6000; //server port
     public int myId = 0;
     public TCP tcp;
+    private bool isConnected = false;
     private delegate void PacketHandler(PacketNetwork _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
 
@@ -29,8 +30,13 @@ public class Client : MonoBehaviour
         tcp = new TCP();
     }
 
+    private void OnApplicationQuit(){
+        Disconnect();
+    }
+
     public void ConnectToServer(){
         InitializeClientData();
+        isConnected = true;
         tcp.Connect();
     }
 
@@ -81,7 +87,7 @@ public class Client : MonoBehaviour
             try{
                 int _byteLength = stream.EndRead(_result);
                 if(_byteLength <= 0){
-                    //TODO: disconnect
+                    instance.Disconnect();
                     return;
                 }
 
@@ -94,7 +100,7 @@ public class Client : MonoBehaviour
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
             }
             catch{
-                // TODO: disconnect
+                Disconnect();
             }
         }
 
@@ -136,6 +142,15 @@ public class Client : MonoBehaviour
 
             return false;
         }
+
+        private void Disconnect(){
+            instance.Disconnect();
+
+            stream = null;
+            receivedData = null;
+            receiveBuffer = null;
+            socket = null;
+        }
     }
 
     // for received packets from server
@@ -157,5 +172,12 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.sendErrorMessage, ClientHandle.ErrorMessageReceived }
         };
         Debug.Log("initialized packets");
+    }
+
+    private void Disconnect(){
+        if(isConnected){
+            isConnected = false;
+            tcp.socket.Close();
+        }
     }
 }
