@@ -16,7 +16,8 @@ public enum ServerPackets
     sendFilterSummary,
     sendResearcherId,
     sendNodeRequest,
-    sendErrorMessage
+    sendErrorMessage,
+    sendOrientation
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -30,7 +31,8 @@ public enum ClientPackets
     sendFilterSummary,
     sendResearcherId,
     sendNodeRequest,
-    sendErrorMessage
+    sendErrorMessage,
+    sendOrientation
 }
 
 public class PacketNetwork : IDisposable

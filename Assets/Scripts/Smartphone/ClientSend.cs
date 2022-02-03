@@ -100,6 +100,15 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void SendOrientation(bool _isUp){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendOrientation)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_isUp);
+
+            SendTCPData(_packet);
+        }
+    }
+
     // public static void RequestForTexture(){
     //     using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.requestForTexture)){
     //         _packet.Write(Client.instance.myId);

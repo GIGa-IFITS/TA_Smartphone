@@ -109,6 +109,13 @@ public class ClientHandle : MonoBehaviour
         FilterManager.instance.ShowErrorScreen(_errorMsg);
     }
 
+    public static void OrientationReceived(PacketNetwork _packet){
+        bool _isUp = _packet.ReadBool();
+
+        // show large screen
+        //VirtualSmartphone.instance.UpdateDeviceOrientation(_isUp);
+    }
+
     // receive request for texture message from server
     // public static void TextureRequested(PacketNetwork _packet){
     //     string _msg = _packet.ReadString();

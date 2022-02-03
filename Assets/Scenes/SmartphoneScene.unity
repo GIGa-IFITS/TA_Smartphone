@@ -2643,6 +2643,7 @@ MonoBehaviour:
   dashboardErrorPanel: {fileID: 526277841}
   dashboardLoading: {fileID: 641321863}
   detailText: {fileID: 779645878}
+  ipText: {fileID: 17248276}
   renderCamera: {fileID: 241502412}
   debuggingText: {fileID: 833704180}
 --- !u!114 &237862832
@@ -3385,6 +3386,7 @@ MonoBehaviour:
   ip: 127.0.0.1
   port: 6000
   myId: 0
+  canvas: {fileID: 237862826}
 --- !u!1 &269471725
 GameObject:
   m_ObjectHideFlags: 0
@@ -15704,7 +15706,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1783936166}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 237862831}
+        m_MethodName: OnTapDisconnect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1783936166
 MonoBehaviour:
   m_ObjectHideFlags: 0

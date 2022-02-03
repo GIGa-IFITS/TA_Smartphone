@@ -18,6 +18,7 @@ public class NetworkUIManager : MonoBehaviour {
     [SerializeField] private GameObject dashboardLoading;
     private TextMeshProUGUI connectButtonText;
     [SerializeField] private TextMeshProUGUI detailText;
+    [SerializeField] private TextMeshProUGUI ipText;
     [SerializeField] private Camera renderCamera;
     private Texture2D textureToSend2D;
     private bool connectSuccess;
@@ -33,6 +34,8 @@ public class NetworkUIManager : MonoBehaviour {
     private TextMeshProUGUI patents;
     private TextMeshProUGUI research;
     public TextMeshProUGUI debuggingText;
+    private bool isDisconnectButtonPressed = false;
+    private bool isOrientationUp = false;
     private void Awake()
     {
         if (instance == null)
@@ -60,6 +63,16 @@ public class NetworkUIManager : MonoBehaviour {
         research = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(5).GetComponent<TextMeshProUGUI>();
     }
 
+    private void Update(){
+        if(!isOrientationUp && Input.deviceOrientation == DeviceOrientation.FaceUp){
+            isOrientationUp = true;
+            ClientSend.SendOrientation(isOrientationUp);
+        }else if(isOrientationUp && Input.deviceOrientation != DeviceOrientation.FaceUp){
+            isOrientationUp = false;
+            ClientSend.SendOrientation(isOrientationUp);
+        }
+    }
+
     // to connect to VR
     private void SubmitIP(string _ip)
     {
@@ -81,6 +94,7 @@ public class NetworkUIManager : MonoBehaviour {
         ipField.interactable = false;
         StartCoroutine(WaitForNSeconds(1f));
         Client.instance.ConnectToServer();
+        ipText.text = "Connected to:" + "\n" + Client.instance.ip;
     }
 
     IEnumerator WaitForNSeconds(float n)
@@ -223,7 +237,29 @@ public class NetworkUIManager : MonoBehaviour {
         CopyRenderTextureTo2D();
         return textureToSend2D.EncodeToPNG();
     }
+    public void OnTapDisconnect(){
+        isDisconnectButtonPressed = true;
+        Client.instance.Disconnect();
+    }
+    public void Disconnected(){
+        Debug.Log("disconnectadsadadafrgsgr");
 
+        for(int i = 0; i < transform.childCount; i++){
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+        connectMenu.SetActive(true);
+        if(!isDisconnectButtonPressed){
+            detailText.text = "Connection lost";
+            detailText.color = new Color32(231, 65, 65, 255);
+            connectButtonText.text = "Try Again";
+        }else{
+            detailText.gameObject.SetActive(false);
+            connectButtonText.text = "Connect";
+        }
+        connectButton.GetComponent<Button>().interactable = true;
+        ipField.interactable = true;
+        isDisconnectButtonPressed = false;
 
-    
+        Debug.Log("end");
+    }
 }

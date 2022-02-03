@@ -15,6 +15,7 @@ public class Client : MonoBehaviour
     public int myId = 0;
     public TCP tcp;
     private bool isConnected = false;
+    public GameObject canvas;
     private delegate void PacketHandler(PacketNetwork _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
 
@@ -169,15 +170,24 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.sendFilterSummary, ClientHandle.FilterSummaryReceived },
             { (int)ServerPackets.sendResearcherId, ClientHandle.ResearcherIdReceived },
             { (int)ServerPackets.sendNodeRequest, ClientHandle.NodeRequestReceived },
-            { (int)ServerPackets.sendErrorMessage, ClientHandle.ErrorMessageReceived }
+            { (int)ServerPackets.sendErrorMessage, ClientHandle.ErrorMessageReceived },
+            { (int)ServerPackets.sendOrientation, ClientHandle.OrientationReceived }
         };
         Debug.Log("initialized packets");
     }
 
-    private void Disconnect(){
+    public void Disconnect(){
         if(isConnected){
             isConnected = false;
             tcp.socket.Close();
+
+            if(myId == 1){
+                Debug.Log("vr");
+                //Manager.instance.Disconnected();
+            }else{
+                // only print debug, doesnt do anything else
+                NetworkUIManager.instance.Disconnected();
+            }
         }
     }
 }
