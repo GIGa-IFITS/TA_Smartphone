@@ -116,6 +116,12 @@ public class ClientHandle : MonoBehaviour
         //VirtualSmartphone.instance.UpdateDeviceOrientation(_isUp);
     }
 
+    public static void NodeSizeReceived(PacketNetwork _packet){
+        float _nodeSize = _packet.ReadFloat();
+
+        //Manager.instance.resizeNode(_nodeSize);
+    }
+
     // receive request for texture message from server
     // public static void TextureRequested(PacketNetwork _packet){
     //     string _msg = _packet.ReadString();

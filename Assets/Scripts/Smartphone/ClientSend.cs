@@ -109,6 +109,15 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void SendNodeSize(float _nodeSize){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendNodeSize)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_nodeSize);
+
+            SendTCPData(_packet);
+        }
+    }
+
     // public static void RequestForTexture(){
     //     using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.requestForTexture)){
     //         _packet.Write(Client.instance.myId);

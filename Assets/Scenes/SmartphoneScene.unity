@@ -2644,6 +2644,9 @@ MonoBehaviour:
   dashboardLoading: {fileID: 641321863}
   detailText: {fileID: 779645878}
   ipText: {fileID: 17248276}
+  addNodeSizeBtn: {fileID: 942398500}
+  subtractNodeSizeBtn: {fileID: 1433596838}
+  nodeSizeText: {fileID: 573739726}
   renderCamera: {fileID: 241502412}
   debuggingText: {fileID: 833704180}
 --- !u!114 &237862832
@@ -5718,7 +5721,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 640, y: -50}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &573739726
 MonoBehaviour:
@@ -5739,7 +5742,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5
+  m_text: 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f8a3af301844cc141a33dfcac99457d7, type: 2}
   m_sharedMaterial: {fileID: 1966368560025441568, guid: f8a3af301844cc141a33dfcac99457d7,
@@ -9100,7 +9103,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 780, y: -50}
+  m_AnchoredPosition: {x: 790, y: -50}
   m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &942398500
@@ -9145,7 +9148,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 942398501}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 237862831}
+        m_MethodName: OnTapAddNodeSize
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &942398501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12517,7 +12531,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1433596839}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 237862831}
+        m_MethodName: OnTapSubtractNodeSize
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1433596839
 MonoBehaviour:
   m_ObjectHideFlags: 0

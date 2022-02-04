@@ -19,6 +19,9 @@ public class NetworkUIManager : MonoBehaviour {
     private TextMeshProUGUI connectButtonText;
     [SerializeField] private TextMeshProUGUI detailText;
     [SerializeField] private TextMeshProUGUI ipText;
+    [SerializeField] private Button addNodeSizeBtn;
+    [SerializeField] private Button subtractNodeSizeBtn;
+    [SerializeField] private TextMeshProUGUI nodeSizeText;
     [SerializeField] private Camera renderCamera;
     private Texture2D textureToSend2D;
     private bool connectSuccess;
@@ -36,6 +39,9 @@ public class NetworkUIManager : MonoBehaviour {
     public TextMeshProUGUI debuggingText;
     private bool isDisconnectButtonPressed = false;
     private bool isOrientationUp = false;
+    private float nodeSize = 2f;
+    private float maxNodeSize = 10f;
+    private float minNodeSize = 1f;
     private void Awake()
     {
         if (instance == null)
@@ -203,6 +209,30 @@ public class NetworkUIManager : MonoBehaviour {
     public void OnTapSettingsMenu(){
         settingsMenu.SetActive(true);
         ClientSend.SendTexture();
+    }
+
+    public void OnTapAddNodeSize(){
+        if(nodeSize < maxNodeSize){
+            nodeSize++;
+            nodeSizeText.text = nodeSize.ToString();
+            subtractNodeSizeBtn.interactable = true;
+            if(nodeSize == maxNodeSize){
+                addNodeSizeBtn.interactable = false;
+            }
+            ClientSend.SendNodeSize(nodeSize);
+        }
+    }
+
+    public void OnTapSubtractNodeSize(){
+        if(nodeSize > minNodeSize){
+            nodeSize--;
+            nodeSizeText.text = nodeSize.ToString();
+            addNodeSizeBtn.interactable = true;
+            if(nodeSize == minNodeSize){
+                subtractNodeSizeBtn.interactable = false;
+            }
+            ClientSend.SendNodeSize(nodeSize);
+        }
     }
 
     private void CopyRenderTextureTo2D(){
