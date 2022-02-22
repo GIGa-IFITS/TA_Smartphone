@@ -40,7 +40,7 @@ public class NetworkUIManager : MonoBehaviour {
     private bool isDisconnectButtonPressed = false;
     private bool isOrientationUp = false;
     private float nodeSize = 2f;
-    private float maxNodeSize = 10f;
+    private float maxNodeSize = 5f;
     private float minNodeSize = 1f;
     private void Awake()
     {
