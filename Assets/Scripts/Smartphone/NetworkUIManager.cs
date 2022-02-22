@@ -220,6 +220,7 @@ public class NetworkUIManager : MonoBehaviour {
                 addNodeSizeBtn.interactable = false;
             }
             ClientSend.SendNodeSize(nodeSize);
+            ClientSend.SendTexture();
         }
     }
 
@@ -232,6 +233,7 @@ public class NetworkUIManager : MonoBehaviour {
                 subtractNodeSizeBtn.interactable = false;
             }
             ClientSend.SendNodeSize(nodeSize);
+            ClientSend.SendTexture();
         }
     }
 
@@ -272,7 +274,7 @@ public class NetworkUIManager : MonoBehaviour {
         Client.instance.Disconnect();
     }
     public void Disconnected(){
-        Debug.Log("disconnectadsadadafrgsgr");
+        //debuggingText.text = "success!";
 
         for(int i = 0; i < transform.childCount; i++){
             transform.GetChild(i).gameObject.SetActive(false);
@@ -289,7 +291,5 @@ public class NetworkUIManager : MonoBehaviour {
         connectButton.GetComponent<Button>().interactable = true;
         ipField.interactable = true;
         isDisconnectButtonPressed = false;
-
-        Debug.Log("end");
     }
 }

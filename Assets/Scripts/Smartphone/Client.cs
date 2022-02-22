@@ -21,13 +21,15 @@ public class Client : MonoBehaviour
 
     private void Awake() {
         if (instance == null){
-            Debug.Log("client instantiated");
             instance = this;
         }    
         else if(instance != this){
             Debug.Log("Instance already exists, destroying object");
             Destroy(this);
         }
+    }
+
+    private void Start(){
         tcp = new TCP();
     }
 
@@ -181,14 +183,11 @@ public class Client : MonoBehaviour
         if(isConnected){
             isConnected = false;
             tcp.socket.Close();
+            Debug.Log("disconnected");
 
-            if(myId == 1){
-                Debug.Log("vr");
-                //Manager.instance.Disconnected();
-            }else{
-                // only print debug, doesnt do anything else
+            ThreadManager.ExecuteOnMainThread(() => {
                 NetworkUIManager.instance.Disconnected();
-            }
+            });
         }
     }
 }
