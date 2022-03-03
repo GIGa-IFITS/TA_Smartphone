@@ -118,6 +118,15 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void SendPageType(string _pageType){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendPageType)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_pageType);
+
+            SendTCPData(_packet);
+        }
+    }
+
     // public static void RequestForTexture(){
     //     using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.requestForTexture)){
     //         _packet.Write(Client.instance.myId);

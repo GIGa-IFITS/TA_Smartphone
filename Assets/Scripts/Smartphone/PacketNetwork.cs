@@ -18,7 +18,8 @@ public enum ServerPackets
     sendNodeRequest,
     sendErrorMessage,
     sendOrientation,
-    sendNodeSize
+    sendNodeSize,
+    sendPageType
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -34,7 +35,8 @@ public enum ClientPackets
     sendNodeRequest,
     sendErrorMessage,
     sendOrientation,
-    sendNodeSize
+    sendNodeSize,
+    sendPageType
 }
 
 public class PacketNetwork : IDisposable

@@ -174,7 +174,8 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.sendNodeRequest, ClientHandle.NodeRequestReceived },
             { (int)ServerPackets.sendErrorMessage, ClientHandle.ErrorMessageReceived },
             { (int)ServerPackets.sendOrientation, ClientHandle.OrientationReceived },
-            { (int)ServerPackets.sendNodeSize, ClientHandle.NodeSizeReceived }
+            { (int)ServerPackets.sendNodeSize, ClientHandle.NodeSizeReceived },
+            { (int)ServerPackets.sendPageType, ClientHandle.PageTypeReceived }
         };
         Debug.Log("initialized packets");
     }

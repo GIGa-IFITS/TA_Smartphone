@@ -122,6 +122,11 @@ public class ClientHandle : MonoBehaviour
         //Manager.instance.resizeNode(_nodeSize);
     }
 
+    public static void PageTypeReceived(PacketNetwork _packet){
+        string _pageType = _packet.ReadString();
+        //VirtualSmartphoneCanvas.instance.ChangeMenuScreen(_pageType);
+    }
+
     // receive request for texture message from server
     // public static void TextureRequested(PacketNetwork _packet){
     //     string _msg = _packet.ReadString();

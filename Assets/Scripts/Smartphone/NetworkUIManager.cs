@@ -17,6 +17,7 @@ public class NetworkUIManager : MonoBehaviour {
     [SerializeField] private GameObject dashboardErrorPanel;
     [SerializeField] private GameObject dashboardLoading;
     private TextMeshProUGUI connectButtonText;
+    [SerializeField] private TextMeshProUGUI ipInputText;
     [SerializeField] private TextMeshProUGUI detailText;
     [SerializeField] private TextMeshProUGUI ipText;
     [SerializeField] private Button addNodeSizeBtn;
@@ -60,6 +61,7 @@ public class NetworkUIManager : MonoBehaviour {
         ipField.onEndEdit.AddListener(SubmitIP);
         connectSuccess = false;
         connectButtonText = connectButton.GetComponentInChildren<TextMeshProUGUI>();
+        ipInputText = ipField.transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
 
         journals = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
         conferences = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
@@ -96,8 +98,11 @@ public class NetworkUIManager : MonoBehaviour {
         detailText.text = "Connecting...";
         detailText.color = new Color32(50, 59, 89, 255);
         connectButtonText.text = "Connect";
+        connectButtonText.color = new Color32(142, 144, 149, 255);
         connectButton.GetComponent<Button>().interactable = false;
         ipField.interactable = false;
+        ipInputText.color = new Color32(142, 144, 149, 255);
+        
         StartCoroutine(WaitForNSeconds(1f));
         Client.instance.ConnectToServer();
         ipText.text = "Connected to:" + "\n" + Client.instance.ip;
@@ -110,8 +115,10 @@ public class NetworkUIManager : MonoBehaviour {
             detailText.text = "Fail to connect";
             detailText.color = new Color32(231, 65, 65, 255);
             connectButtonText.text = "Try Again";
+            connectButtonText.color = new Color32(255, 255, 255, 255);
             connectButton.GetComponent<Button>().interactable = true;
             ipField.interactable = true;
+            ipInputText.color = new Color32(50, 59, 89, 255);
         } 
     }
 
@@ -129,12 +136,12 @@ public class NetworkUIManager : MonoBehaviour {
     }
 
     public void OnTapDashboardMenu(){
-        Debug.Log("tap!");
         dashboardLoading.SetActive(true);
         dashboardPanel.SetActive(false);
         dashboardErrorPanel.SetActive(false);
         dashboardMenu.SetActive(true);
-        ClientSend.SendTexture();
+        //ClientSend.SendTexture();
+        ClientSend.SendPageType("dashboardMenu");
       
         // get dashboard data
         requestPeneliti.URL = URL;
@@ -149,7 +156,8 @@ public class NetworkUIManager : MonoBehaviour {
                 Debug.Log("fail!");
                 dashboardLoading.SetActive(false);
                 dashboardErrorPanel.SetActive(true);
-                ClientSend.SendTexture();
+                //ClientSend.SendTexture();
+                ClientSend.SendPageType("dashboardError");
             }
         }));   
     }
@@ -166,12 +174,14 @@ public class NetworkUIManager : MonoBehaviour {
         patents.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[4].paten.ToString();
         research.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[5].research.ToString();
 
-        ClientSend.SendTexture();
+        //ClientSend.SendTexture();
+        ClientSend.SendPageType("dashboardData");
     }
 
     public void OnTapFilterMenu(){
         filterMenu.SetActive(true);
-        ClientSend.SendTexture();
+        //ClientSend.SendTexture();
+        ClientSend.SendPageType("filterMenu");
     }
 
     public void GetResearcherDetailData(string _id){
@@ -179,7 +189,7 @@ public class NetworkUIManager : MonoBehaviour {
         StartCoroutine(requestPeneliti.RequestData((result) =>
         {
             // mengambil jumlah jurnal, conference, books, thesis, paten dan research yang ada
-            detailPenelitiITS(result);
+            FilterManager.instance.UpdateResearcherDetail(result);
         }, (error) => {
             if (error != "")
             {
@@ -188,27 +198,10 @@ public class NetworkUIManager : MonoBehaviour {
         }));
     }
 
-    public void detailPenelitiITS(RawData rawdata)
-    {   
-        List<string> detail = new List<string>();
-        detail.Add(rawdata.data[0].detail_peneliti[0].nama);
-        detail.Add(rawdata.data[0].detail_peneliti[0].tanggal_lahir);
-        detail.Add(rawdata.data[0].detail_peneliti[0].fakultas);
-        detail.Add(rawdata.data[0].detail_peneliti[0].departemen);
-
-        detail.Add(rawdata.data[0].detail_peneliti[0].jurnal.ToString());
-        detail.Add(rawdata.data[0].detail_peneliti[0].konferensi.ToString());
-        detail.Add(rawdata.data[0].detail_peneliti[0].buku.ToString());
-        detail.Add(rawdata.data[0].detail_peneliti[0].tesis.ToString());
-        detail.Add(rawdata.data[0].detail_peneliti[0].paten.ToString());
-        detail.Add(rawdata.data[0].detail_peneliti[0].penelitian.ToString());
-
-        FilterManager.instance.UpdateResearcherDetail(detail);
-    }
-
     public void OnTapSettingsMenu(){
         settingsMenu.SetActive(true);
-        ClientSend.SendTexture();
+        //ClientSend.SendTexture();
+        ClientSend.SendPageType("settingsMenu");
     }
 
     public void OnTapAddNodeSize(){
@@ -220,7 +213,7 @@ public class NetworkUIManager : MonoBehaviour {
                 addNodeSizeBtn.interactable = false;
             }
             ClientSend.SendNodeSize(nodeSize);
-            ClientSend.SendTexture();
+            //ClientSend.SendTexture();
         }
     }
 
@@ -233,7 +226,7 @@ public class NetworkUIManager : MonoBehaviour {
                 subtractNodeSizeBtn.interactable = false;
             }
             ClientSend.SendNodeSize(nodeSize);
-            ClientSend.SendTexture();
+            //ClientSend.SendTexture();
         }
     }
 
@@ -284,9 +277,14 @@ public class NetworkUIManager : MonoBehaviour {
             detailText.text = "Connection lost";
             detailText.color = new Color32(231, 65, 65, 255);
             connectButtonText.text = "Try Again";
+            connectButtonText.color = new Color32(255, 255, 255, 255);
+            ipInputText.color = new Color32(50, 59, 89, 255);
+            
         }else{
             detailText.gameObject.SetActive(false);
             connectButtonText.text = "Connect";
+            connectButtonText.color = new Color32(255, 255, 255, 255);
+            ipInputText.color = new Color32(50, 59, 89, 255);
         }
         connectButton.GetComponent<Button>().interactable = true;
         ipField.interactable = true;
