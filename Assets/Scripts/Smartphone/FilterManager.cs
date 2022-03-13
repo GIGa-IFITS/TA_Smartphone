@@ -24,7 +24,6 @@ public class FilterManager : MonoBehaviour
     private TextMeshProUGUI summaryInstructionText;
     private TextMeshProUGUI detFilterText;
     private TextMeshProUGUI detNameText;
-    //private TextMeshProUGUI detBirthText;
     private TextMeshProUGUI detFacultyText;
     private TextMeshProUGUI detDeptText;
     private TextMeshProUGUI detJournalText;
@@ -33,8 +32,6 @@ public class FilterManager : MonoBehaviour
     private TextMeshProUGUI detThesisText;
     private TextMeshProUGUI detPatentText;
     private TextMeshProUGUI detResearchText;
-    // private Stack<string> nodeTag;
-    // private Stack<string> nodeId;
     public TextMeshProUGUI debuggingText;
     private string prevNodeName;
     private string prevNodeTotal;
@@ -116,7 +113,6 @@ public class FilterManager : MonoBehaviour
         }
 
         ClientSend.SendCommand(_filter);
-        //ClientSend.SendTexture();
     }
 
     public void ShowFilterSummary(string _name, int _total, string _tag, string _nodeId, string _filterName){
@@ -161,7 +157,6 @@ public class FilterManager : MonoBehaviour
         }
 
         Handheld.Vibrate();
-        //ClientSend.SendTexture();
     }
 
     public void ShowResearcherDetail(string _id, string _filterName){
@@ -176,15 +171,12 @@ public class FilterManager : MonoBehaviour
 
         NetworkUIManager.instance.GetResearcherDetailData(_id);
         Handheld.Vibrate();
-        //ClientSend.SendTexture();
-
     }
 
     public void RefreshResearcherDetail(){
         detailLoading.SetActive(true);
         detailPanel.SetActive(false);
         detailErrorPanel.SetActive(false);
-        //ClientSend.SendTexture();
         NetworkUIManager.instance.GetResearcherDetailData(currResearcherId);
         ClientSend.SendPageType("retryDetail");
     }
@@ -204,7 +196,6 @@ public class FilterManager : MonoBehaviour
         detPatentText.text = rawdata.data[0].detail_peneliti[0].paten.ToString();
         detResearchText.text = rawdata.data[0].detail_peneliti[0].penelitian.ToString();
 
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("researcherDetailData");
     }
 
@@ -213,7 +204,6 @@ public class FilterManager : MonoBehaviour
         detailPanel.SetActive(false);
         detailErrorPanel.SetActive(true);
 
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("errorDetail");
     }
 
@@ -221,7 +211,6 @@ public class FilterManager : MonoBehaviour
         detailMenu.SetActive(false);
         summaryMenu.SetActive(true);
 
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("backToSummaryMenu");
     }
 
@@ -232,7 +221,6 @@ public class FilterManager : MonoBehaviour
         summaryMenu.SetActive(false);
         filterMenu.SetActive(true);
 
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("backToFilterMenu");
     }
 
@@ -253,7 +241,6 @@ public class FilterManager : MonoBehaviour
             summaryTotalText.text = prevNodeTotal;
 
             Handheld.Vibrate();
-            //ClientSend.SendTexture();
             ClientSend.SendPageType("backToPrevNode");
         }
         else{
@@ -272,7 +259,6 @@ public class FilterManager : MonoBehaviour
             summaryErrorPanel.SetActive(true);
             summaryPanel.SetActive(false);
         }
-        //ClientSend.SendTexture();
     }
 
     public void RetryFilter(){
@@ -284,7 +270,6 @@ public class FilterManager : MonoBehaviour
             ClientSend.SendNodeRequest(currId, currId2, currTag);
             summaryPanel.SetActive(true);
             summaryErrorPanel.SetActive(false);
-            //ClientSend.SendTexture();
             ClientSend.SendPageType("retryFilter");
         }
     }

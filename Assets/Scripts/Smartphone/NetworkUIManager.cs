@@ -124,9 +124,6 @@ public class NetworkUIManager : MonoBehaviour {
 
     public void ClientConnected(string _ip){
         connectSuccess = true;
-        
-        // send phone size for the first time
-        ClientSend.SendPhoneSize();
 
         // set database url
         SetURL(_ip);
@@ -140,7 +137,6 @@ public class NetworkUIManager : MonoBehaviour {
         dashboardPanel.SetActive(false);
         dashboardErrorPanel.SetActive(false);
         dashboardMenu.SetActive(true);
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("dashboardMenu");
       
         // get dashboard data
@@ -156,7 +152,6 @@ public class NetworkUIManager : MonoBehaviour {
                 Debug.Log("fail!");
                 dashboardLoading.SetActive(false);
                 dashboardErrorPanel.SetActive(true);
-                //ClientSend.SendTexture();
                 ClientSend.SendPageType("dashboardError");
             }
         }));   
@@ -174,13 +169,11 @@ public class NetworkUIManager : MonoBehaviour {
         patents.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[4].paten.ToString();
         research.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[5].research.ToString();
 
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("dashboardData");
     }
 
     public void OnTapFilterMenu(){
         filterMenu.SetActive(true);
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("filterMenu");
     }
 
@@ -200,7 +193,6 @@ public class NetworkUIManager : MonoBehaviour {
 
     public void OnTapSettingsMenu(){
         settingsMenu.SetActive(true);
-        //ClientSend.SendTexture();
         ClientSend.SendPageType("settingsMenu");
     }
 
@@ -213,7 +205,6 @@ public class NetworkUIManager : MonoBehaviour {
                 addNodeSizeBtn.interactable = false;
             }
             ClientSend.SendNodeSize(nodeSize);
-            //ClientSend.SendTexture();
         }
     }
 
@@ -226,7 +217,6 @@ public class NetworkUIManager : MonoBehaviour {
                 subtractNodeSizeBtn.interactable = false;
             }
             ClientSend.SendNodeSize(nodeSize);
-            //ClientSend.SendTexture();
         }
     }
 
@@ -267,8 +257,6 @@ public class NetworkUIManager : MonoBehaviour {
         Client.instance.Disconnect();
     }
     public void Disconnected(){
-        //debuggingText.text = "success!";
-
         for(int i = 0; i < transform.childCount; i++){
             transform.GetChild(i).gameObject.SetActive(false);
         }

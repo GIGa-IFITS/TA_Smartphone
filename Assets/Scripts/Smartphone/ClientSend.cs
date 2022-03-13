@@ -20,34 +20,6 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void SendPhoneSize(){
-        using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendPhoneSize)){
-            _packet.Write(Client.instance.myId);
-            _packet.Write(NetworkUIManager.instance.GetScreenWidth());
-            _packet.Write(NetworkUIManager.instance.GetScreenHeight());
-
-            SendTCPData(_packet);
-        }
-    }
-
-    public static void SendTexture(){
-        using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendTexture)){
-            _packet.Write(Client.instance.myId);
-            _packet.Write(NetworkUIManager.instance.GetTexture());
-
-            SendTCPData(_packet);
-        }
-    }
-
-    public static void SendDashboardToggle(bool _on){
-        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendDashboardToggle)){
-            _packet.Write(Client.instance.myId);
-            _packet.Write(_on);
-
-            SendTCPData(_packet);
-        }
-    }
-
     public static void SendCommand(string _command){
         using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendCommand)){
             _packet.Write(Client.instance.myId);
@@ -126,28 +98,6 @@ public class ClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
-
-    // public static void RequestForTexture(){
-    //     using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.requestForTexture)){
-    //         _packet.Write(Client.instance.myId);
-
-    //         SendTCPData(_packet);
-    //     }
-    // }
-
-    // public static void SendDashboardData(int journals, int conferences, int books, int thesis, int patents, int research){
-    //     using (PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendDashboardData)){
-    //         _packet.Write(Client.instance.myId);
-    //         _packet.Write(journals);
-    //         _packet.Write(conferences);
-    //         _packet.Write(books);
-    //         _packet.Write(thesis);
-    //         _packet.Write(patents);
-    //         _packet.Write(research);
-
-    //         SendTCPData(_packet);
-    //     }
-    // }
 
     #endregion
 }

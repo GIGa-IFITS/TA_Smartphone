@@ -15,21 +15,18 @@ public class Client : MonoBehaviour
     public int myId = 0;
     public TCP tcp;
     private bool isConnected = false;
-    public GameObject canvas;
     private delegate void PacketHandler(PacketNetwork _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
 
     private void Awake() {
         if (instance == null){
+            Debug.Log("client instantiated");
             instance = this;
         }    
         else if(instance != this){
             Debug.Log("Instance already exists, destroying object");
             Destroy(this);
         }
-    }
-
-    private void Start(){
         tcp = new TCP();
     }
 
@@ -165,9 +162,7 @@ public class Client : MonoBehaviour
         
         packetHandlers = new Dictionary<int, PacketHandler>(){
             { (int)ServerPackets.welcome, ClientHandle.Welcome },
-            { (int)ServerPackets.sendPhoneSize, ClientHandle.PhoneSizeReceived },
-            { (int)ServerPackets.sendTexture, ClientHandle.TextureReceived }, 
-            { (int)ServerPackets.sendDashboardToggle, ClientHandle.ToggleReceived },
+            { (int)ServerPackets.sendPhoneStatus, ClientHandle.PhoneStatusReceived },
             { (int)ServerPackets.sendCommand, ClientHandle.CommandReceived },
             { (int)ServerPackets.sendFilterSummary, ClientHandle.FilterSummaryReceived },
             { (int)ServerPackets.sendResearcherId, ClientHandle.ResearcherIdReceived },
@@ -185,7 +180,7 @@ public class Client : MonoBehaviour
             isConnected = false;
             tcp.socket.Close();
             Debug.Log("disconnected");
-
+            // smartphone only
             ThreadManager.ExecuteOnMainThread(() => {
                 NetworkUIManager.instance.Disconnected();
             });
