@@ -88,8 +88,8 @@ public class NetworkUIManager : MonoBehaviour {
     }
 
     // to connect to database
-    private void SetURL(string _ip){
-        URL = "https://"+ _ip + ":5000";
+    private void SetURL(string _url){
+        URL = _url;
     }
 
     public void ConnectToServer()
@@ -122,11 +122,11 @@ public class NetworkUIManager : MonoBehaviour {
         } 
     }
 
-    public void ClientConnected(string _ip){
+    public void ClientConnected(string _url){
         connectSuccess = true;
 
         // set database url
-        SetURL(_ip);
+        SetURL(_url);
 
         connectMenu.SetActive(false);
         OnTapDashboardMenu();
