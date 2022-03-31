@@ -99,5 +99,14 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void SendSwipe(string _swipeType){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendSwipe)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_swipeType);
+
+            SendTCPData(_packet);
+        }
+    }
+
     #endregion
 }

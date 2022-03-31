@@ -14,7 +14,7 @@ public class ClientHandle : MonoBehaviour
 
         // if smartphone
         if(Client.instance.myId == 2){
-            NetworkUIManager.instance.ClientConnected(_msg);
+            UIManager.instance.ClientConnected(_msg);
         }
 
         //Send welcome received packet
@@ -106,8 +106,14 @@ public class ClientHandle : MonoBehaviour
     }
 
     public static void PageTypeReceived(PacketNetwork _packet){
-        // string _pageType = _packet.ReadString();
-        // Debug.Log("receive page type " + _pageType);
-        // VirtualSmartphoneCanvas.instance.ChangeMenuScreen(_pageType);
+        string _pageType = _packet.ReadString();
+        Debug.Log("receive page type " + _pageType);
+        UIManager.instance.ChangeMenuScreen(_pageType);
+    }
+
+    public static void SwipeReceived(PacketNetwork _packet){
+        // string _swipeType = _packet.ReadString();
+        // Debug.Log("receive swipe type " + _swipeType);
+        // Manager.instance.SetScreenMode(_swipeType);
     }
 }
