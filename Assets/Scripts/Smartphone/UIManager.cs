@@ -117,6 +117,7 @@ public class UIManager : MonoBehaviour {
                 dashboardPanel.SetActive(false);
                 dashboardErrorPanel.SetActive(false);
                 dashboardMenu.SetActive(true);
+                searchMenu.SetActive(false);
                 break;
 
             case "dashboardData":
