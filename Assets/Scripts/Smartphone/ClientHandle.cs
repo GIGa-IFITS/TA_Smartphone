@@ -116,4 +116,10 @@ public class ClientHandle : MonoBehaviour
         // Debug.Log("receive swipe type " + _swipeType);
         // Manager.instance.SetScreenMode(_swipeType);
     }
+
+    public static void ScrollSpeedReceived(PacketNetwork _packet){
+        // float _scrollSpeed = _packet.ReadFloat();
+        // Debug.Log("receive scroll speed " + _scrollSpeed);
+        // ScreenManager.instance.SetScroll(_scrollSpeed);
+    }
 }
