@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private GameObject connectMenu;
     [SerializeField] private GameObject dashboardMenu;
     [SerializeField] private GameObject searchMenu;
+    [SerializeField] private GameObject searchingMenu;
     [SerializeField] private GameObject connectButton;
     [SerializeField] private GameObject dashboardPanel;
     [SerializeField] private GameObject dashboardErrorPanel;
@@ -147,6 +148,12 @@ public class UIManager : MonoBehaviour {
             case "searchMenu":
                 dashboardMenu.SetActive(false);
                 searchMenu.SetActive(true);
+                searchingMenu.SetActive(false);
+                break;
+
+            case "searchingMenu":
+                searchMenu.SetActive(false);
+                searchingMenu.SetActive(true);
                 break;
         }
     }

@@ -18,7 +18,8 @@ public enum ServerPackets
     sendOrientation,
     sendNodeSize,
     sendPageType,
-    sendSwipe
+    sendSwipe,
+    sendScrollSpeed
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -34,7 +35,8 @@ public enum ClientPackets
     sendOrientation,
     sendNodeSize,
     sendPageType,
-    sendSwipe
+    sendSwipe,
+    sendScrollSpeed
 }
 
 public class PacketNetwork : IDisposable

@@ -108,5 +108,14 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void SendScrollSpeed(float _speed){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendScrollSpeed)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_speed);
+
+            SendTCPData(_packet);
+        }
+    }
+
     #endregion
 }

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class TouchDetector : MonoBehaviour
 {
-    private Vector2 fingerDown;
-    private Vector2 fingerUp;
-    public float SWIPE_THRESHOLD = 20f;
-    private int swipeUpCount;
-    private int swipeDownCount;
+    private Vector2 startPos;
+    private Vector2 endPos;
+    private float startTime;
+    public float SWIPE_THRESHOLD;
     private bool isContentInPhone = true;
-    [SerializeField] private bool isTouching = false;
-    private Touch currTouch;
+    private List<TouchLocation> touches = new List<TouchLocation>();
+    public float cooldownTime;
+    public float timeLastChanged;
 
     void Update()
     {
@@ -19,53 +19,72 @@ public class TouchDetector : MonoBehaviour
             foreach (Touch touch in Input.touches){
                 if (touch.phase == TouchPhase.Began)
                 {
-                    fingerUp = touch.position;
-                    fingerDown = touch.position;
+                    touches.Add(new TouchLocation(touch.fingerId, touch.position));
                 }
-
+                
                 //Detects swipe after finger is released
-                if (touch.phase == TouchPhase.Ended)
+                else if (touch.phase == TouchPhase.Ended)
                 {
-                    fingerUp = touch.position;
-                    checkSwipe();
+                    TouchLocation thisTouch = touches.Find(TouchLocation => TouchLocation.touchId == touch.fingerId);
+                    if(thisTouch != null && Time.time - timeLastChanged > cooldownTime){
+                        thisTouch.endPos = touch.position;
+                        CheckMultiSwipe(thisTouch);
+                    }
+                    touches.Clear();
                 }
             }
         }
         else if(Input.touchCount == 1){
-            if(Input.GetTouch(0).phase == TouchPhase.Ended){
-                Debug.Log("touch!");
-                ClientSend.SendCommand("touch");
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                startPos = touch.position;
+                startTime = Time.time;
+            }
+            
+            //Detects swipe after finger is released
+            if (touch.phase == TouchPhase.Ended)
+            {
+                endPos = touch.position;
+                float distance = endPos.y - startPos.y;
+
+                CheckScroll(distance);
             }
         }
     }
 
-    private void checkSwipe()
+    private void CheckMultiSwipe(TouchLocation _touch)
     {
-        if (Mathf.Abs(fingerUp.y - fingerDown.y) > SWIPE_THRESHOLD)
+        if (_touch.endPos.y - _touch.startPos.y > SWIPE_THRESHOLD && isContentInPhone)//swipe up
         {
-            if (fingerUp.y - fingerDown.y > 0)//up swipe
-            {
-                swipeUpCount++;
-                if(isContentInPhone && swipeUpCount >= 3){
-                    Debug.Log("swipe up");
-                    ClientSend.SendSwipe("up");
-                    swipeUpCount = 0;
-                    Handheld.Vibrate();
-                    isContentInPhone = false;
-                }
-            }
-            else if (fingerUp.y - fingerDown.y < 0)//Down swipe
-            {
-                swipeDownCount++;
-                if(!isContentInPhone && swipeDownCount >= 3){
-                    Debug.Log("swipe down");
-                    ClientSend.SendSwipe("down");
-                    swipeDownCount = 0;
-                    Handheld.Vibrate();
-                    isContentInPhone = true;
-                }    
-            }
-            fingerUp = fingerDown;
+            Debug.Log("swipe up");
+            ClientSend.SendSwipe("up");
+            Handheld.Vibrate();
+            isContentInPhone = false;
+            timeLastChanged = Time.time;
         }
+        else if (_touch.endPos.y - _touch.startPos.y < -SWIPE_THRESHOLD && !isContentInPhone)//swipe down
+        {
+            Debug.Log("swipe down");
+            ClientSend.SendSwipe("down");
+            Handheld.Vibrate();
+            isContentInPhone = true;
+            timeLastChanged = Time.time;  
+        }
+    }
+
+    private void CheckScroll(float _distance){
+        if(Mathf.Abs(_distance) > SWIPE_THRESHOLD){
+            float diffTime = Time.time - startTime;
+            if(diffTime != 0){
+                float speed = (_distance / diffTime) / 10000f;
+                Debug.Log("scroll with speed : " + speed);
+                ClientSend.SendScrollSpeed(speed);
+            }
+        }else{
+            Debug.Log("touch!");
+            ClientSend.SendCommand("touch");
+        }
+
     }
 }
