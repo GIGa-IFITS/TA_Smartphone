@@ -77,7 +77,7 @@ public class TouchDetector : MonoBehaviour
         if(Mathf.Abs(_distance) > SWIPE_THRESHOLD){
             float diffTime = Time.time - startTime;
             if(diffTime != 0){
-                float speed = (_distance / diffTime) / 10000f;
+                float speed = (_distance / diffTime);
                 Debug.Log("scroll with speed : " + speed);
                 ClientSend.SendScrollSpeed(speed);
             }
