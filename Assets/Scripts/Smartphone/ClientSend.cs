@@ -117,5 +117,17 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void SendRotation(float _x, float _y, float _z, float _w){
+        using(PacketNetwork _packet = new PacketNetwork((int)ClientPackets.sendRotation)){
+            _packet.Write(Client.instance.myId);
+            _packet.Write(_x);
+            _packet.Write(_y);
+            _packet.Write(_z);
+            _packet.Write(_w);
+
+            SendTCPData(_packet);
+        }
+    }
+
     #endregion
 }
