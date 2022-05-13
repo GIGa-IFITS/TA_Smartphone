@@ -6768,7 +6768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae70c38766d7d434fbeee2a374d72045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctionQuaternion: {x: 0.50865, y: 0.49119765, z: -0.49119765, w: 0.50865}
+  correctionQuaternion: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
 --- !u!4 &2112202627
 Transform:
   m_ObjectHideFlags: 0
