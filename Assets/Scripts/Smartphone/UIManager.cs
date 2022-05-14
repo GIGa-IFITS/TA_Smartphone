@@ -13,9 +13,6 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private GameObject searchMenu;
     [SerializeField] private GameObject searchingMenu;
     [SerializeField] private GameObject connectButton;
-    [SerializeField] private GameObject dashboardPanel;
-    [SerializeField] private GameObject dashboardErrorPanel;
-    [SerializeField] private GameObject dashboardLoading;
     private TextMeshProUGUI connectButtonText;
     private TextMeshProUGUI ipInputText;
     [SerializeField] private TextMeshProUGUI detailText;
@@ -25,12 +22,6 @@ public class UIManager : MonoBehaviour {
     RequestHandler requestPeneliti = new RequestHandler();
     private string URL = "https://127.0.0.5:5000";
     // dashboard text
-    private TextMeshProUGUI journals;
-    private TextMeshProUGUI conferences;
-    private TextMeshProUGUI books;
-    private TextMeshProUGUI thesis;
-    private TextMeshProUGUI patents;
-    private TextMeshProUGUI research;
     public TextMeshProUGUI debuggingText;
     private bool isDisconnectButtonPressed = false;
     private void Awake()
@@ -52,13 +43,6 @@ public class UIManager : MonoBehaviour {
         connectSuccess = false;
         connectButtonText = connectButton.GetComponentInChildren<TextMeshProUGUI>();
         ipInputText = ipField.transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
-
-        journals = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
-        conferences = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>();
-        books = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(2).GetComponent<TextMeshProUGUI>();
-        thesis = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(3).GetComponent<TextMeshProUGUI>();
-        patents = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(4).GetComponent<TextMeshProUGUI>();
-        research = dashboardMenu.transform.GetChild(2).GetChild(1).GetChild(1).GetChild(2).GetChild(5).GetComponent<TextMeshProUGUI>();
     }
 
     // to connect to VR
@@ -114,35 +98,8 @@ public class UIManager : MonoBehaviour {
      public void ChangeMenuScreen(string _pageType){
         switch (_pageType) {
             case "dashboardMenu":
-                dashboardLoading.SetActive(true);
-                dashboardPanel.SetActive(false);
-                dashboardErrorPanel.SetActive(false);
                 dashboardMenu.SetActive(true);
                 searchMenu.SetActive(false);
-                break;
-
-            case "dashboardData":
-                // get dashboard data
-                requestPeneliti.URL = URL;
-                StartCoroutine(requestPeneliti.RequestData((result) =>
-                {
-                    // mengambil jumlah jurnal, conference, books, thesis, paten dan research yang ada
-                    hasilPublikasiITS(result);
-                    
-                }, (error) => {
-                    if (error != "")
-                    {
-
-                    }
-                }));
-                dashboardLoading.SetActive(false);
-                dashboardPanel.SetActive(true);   
-                break;
-
-            case "dashboardError":
-                dashboardLoading.SetActive(false);
-                dashboardPanel.SetActive(false);
-                dashboardErrorPanel.SetActive(true);
                 break;
     
             case "searchMenu":
@@ -156,17 +113,6 @@ public class UIManager : MonoBehaviour {
                 searchingMenu.SetActive(true);
                 break;
         }
-    }
-
-
-    private void hasilPublikasiITS(RawData rawdata)
-    {
-        journals.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[0].journals.ToString();
-        conferences.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[1].conferences.ToString();
-        books.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[2].books.ToString();
-        thesis.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[3].thesis.ToString();
-        patents.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[4].paten.ToString();
-        research.text = rawdata.data[0].dashboard_data[0].hasil_publikasi[5].research.ToString();
     }
 
     public void Disconnected(){
