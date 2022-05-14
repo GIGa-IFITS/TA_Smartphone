@@ -106,9 +106,9 @@ public class ClientHandle : MonoBehaviour
     }
 
     public static void PageTypeReceived(PacketNetwork _packet){
-        string _pageType = _packet.ReadString();
-        Debug.Log("receive page type " + _pageType);
-        UIManager.instance.ChangeMenuScreen(_pageType);
+        // string _pageType = _packet.ReadString();
+        // Debug.Log("receive page type " + _pageType);
+        // UIManager.instance.ChangeMenuScreen(_pageType);
     }
 
     public static void SwipeReceived(PacketNetwork _packet){

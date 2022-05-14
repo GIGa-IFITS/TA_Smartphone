@@ -9,8 +9,6 @@ public class UIManager : MonoBehaviour {
     public static UIManager instance;
     [SerializeField] private TMP_InputField ipField;
     [SerializeField] private GameObject connectMenu;
-    [SerializeField] private GameObject dashboardMenu;
-    [SerializeField] private GameObject searchMenu;
     [SerializeField] private GameObject searchingMenu;
     [SerializeField] private GameObject connectButton;
     private TextMeshProUGUI connectButtonText;
@@ -92,33 +90,11 @@ public class UIManager : MonoBehaviour {
         SetURL(_url);
 
         connectMenu.SetActive(false);
-        ChangeMenuScreen("dashboardMenu");
-    }
-
-     public void ChangeMenuScreen(string _pageType){
-        switch (_pageType) {
-            case "dashboardMenu":
-                dashboardMenu.SetActive(true);
-                searchMenu.SetActive(false);
-                break;
-    
-            case "searchMenu":
-                dashboardMenu.SetActive(false);
-                searchMenu.SetActive(true);
-                searchingMenu.SetActive(false);
-                break;
-
-            case "searchingMenu":
-                searchMenu.SetActive(false);
-                searchingMenu.SetActive(true);
-                break;
-        }
+        searchingMenu.SetActive(true);
     }
 
     public void Disconnected(){
-        for(int i = 0; i < transform.childCount; i++){
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
+        searchingMenu.SetActive(false);
         connectMenu.SetActive(true);
         if(!isDisconnectButtonPressed){
             detailText.text = "Connection lost";
