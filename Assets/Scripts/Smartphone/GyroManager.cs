@@ -7,6 +7,7 @@ public class GyroManager : MonoBehaviour
     private Gyroscope gyro;
     public Quaternion correctionQuaternion = Quaternion.Euler(90, 88, 0);
     private Quaternion phoneRotation;
+    public bool useCorrection = true;
 
     void Start()
     {
@@ -18,8 +19,11 @@ public class GyroManager : MonoBehaviour
     {
         Quaternion gyroQuaternion = GyroToUnity(Input.gyro.attitude);
         Debug.Log(gyroQuaternion);
-        phoneRotation = correctionQuaternion * gyroQuaternion;
-        //phoneRotation = gyroQuaternion;
+        if(useCorrection){
+            phoneRotation = correctionQuaternion * gyroQuaternion;
+        }else{
+            phoneRotation = gyroQuaternion;
+        }
         ClientSend.SendRotation(phoneRotation.x, phoneRotation.y, phoneRotation.z, phoneRotation.w);
     }
 
