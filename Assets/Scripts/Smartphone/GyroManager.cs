@@ -5,7 +5,7 @@ using UnityEngine;
 public class GyroManager : MonoBehaviour
 {
     private Gyroscope gyro;
-    public Quaternion correctionQuaternion = Quaternion.Euler(90, 88, 0);
+    public Quaternion correctionQuaternion = Quaternion.Euler(90, 0, 0);
     private Quaternion phoneRotation;
     public bool useCorrection = true;
 
