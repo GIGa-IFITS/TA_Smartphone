@@ -12,6 +12,10 @@ public class TouchDetector : MonoBehaviour
     private List<TouchLocation> touches = new List<TouchLocation>();
     public float cooldownTime;
     public float timeLastChanged;
+    private float distance;
+    private float diffTime;
+    private float speed;
+    public bool isScrolling = false;
 
     void Update()
     {
@@ -40,15 +44,35 @@ public class TouchDetector : MonoBehaviour
             {
                 startPos = touch.position;
                 startTime = Time.time;
+                isScrolling = false;
+            }
+
+            if(touch.phase == TouchPhase.Stationary){
+                startPos = touch.position;
+                if(isScrolling){
+                    startTime = Time.time;
+                }
+            }
+
+            if (touch.phase == TouchPhase.Moved)
+            {
+                isScrolling = true;
+                endPos = touch.position;
+                distance = endPos.y - startPos.y;
+                diffTime = Time.time - startTime;
+
+                CalculateScrollSpeed(distance, diffTime);
+                startPos = touch.position;
+                startTime = Time.time;
             }
             
-            //Detects swipe after finger is released
             if (touch.phase == TouchPhase.Ended)
             {
                 endPos = touch.position;
-                float distance = endPos.y - startPos.y;
+                distance = endPos.y - startPos.y;
+                diffTime = Time.time - startTime;
 
-                CheckScroll(distance);
+                CheckTouch(distance, diffTime);
             }
         }
     }
@@ -73,18 +97,23 @@ public class TouchDetector : MonoBehaviour
         }
     }
 
-    private void CheckScroll(float _distance){
+    private void CalculateScrollSpeed(float _distance, float _diffTime){
         if(Mathf.Abs(_distance) > SWIPE_THRESHOLD){
-            float diffTime = Time.time - startTime;
-            if(diffTime != 0){
-                float speed = (_distance / diffTime);
+            speed = (_distance / _diffTime);
+            if(speed != Mathf.Infinity && speed != 0){
                 Debug.Log("scroll with speed : " + speed);
                 ClientSend.SendScrollSpeed(speed);
             }
+        }
+    }
+
+    private void CheckTouch(float _distance, float _diffTime){
+        if(isScrolling){
+            CalculateScrollSpeed(_distance, _diffTime);
         }else{
             Debug.Log("touch!");
             ClientSend.SendCommand("touch");
         }
-
+        isScrolling = false; 
     }
 }

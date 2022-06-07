@@ -18,7 +18,7 @@ public class GyroManager : MonoBehaviour
     void Update()
     {
         Quaternion gyroQuaternion = GyroToUnity(Input.gyro.attitude);
-        Debug.Log(gyroQuaternion);
+        //Debug.Log(gyroQuaternion);
         if(useCorrection){
             phoneRotation = correctionQuaternion * gyroQuaternion;
         }else{
