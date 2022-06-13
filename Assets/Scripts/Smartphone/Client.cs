@@ -162,16 +162,10 @@ public class Client : MonoBehaviour
         
         packetHandlers = new Dictionary<int, PacketHandler>(){
             { (int)ServerPackets.welcome, ClientHandle.Welcome },
-            { (int)ServerPackets.sendPhoneStatus, ClientHandle.PhoneStatusReceived },
-            { (int)ServerPackets.sendCommand, ClientHandle.CommandReceived },
-            { (int)ServerPackets.sendFilterSummary, ClientHandle.FilterSummaryReceived },
-            { (int)ServerPackets.sendResearcherId, ClientHandle.ResearcherIdReceived },
-            { (int)ServerPackets.sendNodeRequest, ClientHandle.NodeRequestReceived },
-            { (int)ServerPackets.sendErrorMessage, ClientHandle.ErrorMessageReceived },
-            { (int)ServerPackets.sendOrientation, ClientHandle.OrientationReceived },
-            { (int)ServerPackets.sendNodeSize, ClientHandle.NodeSizeReceived },
-            { (int)ServerPackets.sendPageType, ClientHandle.PageTypeReceived },
-            { (int)ServerPackets.sendScrollSpeed, ClientHandle.ScrollSpeedReceived }
+            { (int)ServerPackets.sendTouch, ClientHandle.TouchReceived },
+            { (int)ServerPackets.sendSwipe, ClientHandle.SwipeReceived },
+            { (int)ServerPackets.sendScrollSpeed, ClientHandle.ScrollSpeedReceived },
+            { (int)ServerPackets.sendRotation, ClientHandle.RotationReceived }
         };
         Debug.Log("initialized packets");
     }
@@ -183,7 +177,7 @@ public class Client : MonoBehaviour
             Debug.Log("disconnected");
             // smartphone only
             ThreadManager.ExecuteOnMainThread(() => {
-                NetworkUIManager.instance.Disconnected();
+                UIManager.instance.Disconnected();
             });
         }
     }

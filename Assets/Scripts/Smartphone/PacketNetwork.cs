@@ -9,15 +9,7 @@ using System.Text;
 public enum ServerPackets
 {
     welcome = 1,
-    sendPhoneStatus,
-    sendCommand,
-    sendFilterSummary,
-    sendResearcherId,
-    sendNodeRequest,
-    sendErrorMessage,
-    sendOrientation,
-    sendNodeSize,
-    sendPageType,
+    sendTouch,
     sendSwipe,
     sendScrollSpeed,
     sendRotation
@@ -27,15 +19,7 @@ public enum ServerPackets
 public enum ClientPackets
 {
     welcomeReceived = 1,
-    sendPhoneStatus,
-    sendCommand,
-    sendFilterSummary,
-    sendResearcherId,
-    sendNodeRequest,
-    sendErrorMessage,
-    sendOrientation,
-    sendNodeSize,
-    sendPageType,
+    sendTouch,
     sendSwipe,
     sendScrollSpeed,
     sendRotation

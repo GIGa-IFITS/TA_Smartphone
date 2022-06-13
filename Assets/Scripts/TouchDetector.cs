@@ -112,7 +112,7 @@ public class TouchDetector : MonoBehaviour
             CalculateScrollSpeed(_distance, _diffTime);
         }else{
             Debug.Log("touch!");
-            ClientSend.SendCommand("touch");
+            ClientSend.SendTouch("touch");
         }
         isScrolling = false; 
     }
