@@ -11,7 +11,7 @@ public class TouchDetector : MonoBehaviour
     private bool isContentInPhone = true;
     private List<TouchLocation> touches = new List<TouchLocation>();
     public float cooldownTime;
-    public float timeLastChanged;
+    public float nextSwipe;
     private float distance;
     private float diffTime;
     private float speed;
@@ -27,14 +27,14 @@ public class TouchDetector : MonoBehaviour
                 }
                 
                 //Detects swipe after finger is released
-                else if (touch.phase == TouchPhase.Ended)
+                if (touch.phase == TouchPhase.Ended)
                 {
                     TouchLocation thisTouch = touches.Find(TouchLocation => TouchLocation.touchId == touch.fingerId);
-                    if(thisTouch != null && Time.time - timeLastChanged > cooldownTime){
+                    if(thisTouch != null && Time.time > nextSwipe){
                         thisTouch.endPos = touch.position;
                         CheckMultiSwipe(thisTouch);
+                        touches.Clear();
                     }
-                    touches.Clear();
                 }
             }
         }
@@ -85,16 +85,16 @@ public class TouchDetector : MonoBehaviour
             ClientSend.SendSwipe("up");
             Handheld.Vibrate();
             isContentInPhone = false;
-            timeLastChanged = Time.time;
+            nextSwipe = Time.time + cooldownTime;
         }
-        else if (_touch.endPos.y - _touch.startPos.y < -SWIPE_THRESHOLD && !isContentInPhone)//swipe down
+        else if(_touch.endPos.y - _touch.startPos.y < -SWIPE_THRESHOLD && !isContentInPhone)//swipe down
         {
             Debug.Log("swipe down");
             ClientSend.SendSwipe("down");
             Handheld.Vibrate();
             isContentInPhone = true;
-            timeLastChanged = Time.time;  
-        }
+            nextSwipe = Time.time + cooldownTime;
+        }   
     }
 
     private void CalculateScrollSpeed(float _distance, float _diffTime){

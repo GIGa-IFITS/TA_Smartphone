@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour {
         connectSuccess = false;
         connectButtonText = connectButton.GetComponentInChildren<TextMeshProUGUI>();
         ipInputText = ipField.transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
+        Client.instance.ip = ipInputText.text;
     }
 
     // to connect to VR
