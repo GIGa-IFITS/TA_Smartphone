@@ -162,10 +162,7 @@ public class Client : MonoBehaviour
         
         packetHandlers = new Dictionary<int, PacketHandler>(){
             { (int)ServerPackets.welcome, ClientHandle.Welcome },
-            { (int)ServerPackets.sendTouch, ClientHandle.TouchReceived },
-            { (int)ServerPackets.sendSwipe, ClientHandle.SwipeReceived },
-            { (int)ServerPackets.sendScrollSpeed, ClientHandle.ScrollSpeedReceived },
-            { (int)ServerPackets.sendRotation, ClientHandle.RotationReceived }
+            { (int)ServerPackets.sendVibrate, ClientHandle.VibrateReceived }
         };
         Debug.Log("initialized packets");
     }

@@ -21,14 +21,11 @@ public class ClientHandle : MonoBehaviour
         ClientSend.WelcomeReceived();
     }
 
-    // receive command from server
-    public static void TouchReceived(PacketNetwork _packet){
-        // string _touch = _packet.ReadString();
+    // receive vibrate command from server
+    public static void VibrateReceived(PacketNetwork _packet){
+        string _msg = _packet.ReadString();
 
-        // if (_touch == "touch"){
-        //     Debug.Log("touch detected");
-        //     ScreenManager.instance.TouchButton();
-        // }
+        Handheld.Vibrate();
     }
 
     public static void SwipeReceived(PacketNetwork _packet){

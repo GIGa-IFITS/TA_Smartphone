@@ -9,10 +9,7 @@ using System.Text;
 public enum ServerPackets
 {
     welcome = 1,
-    sendTouch,
-    sendSwipe,
-    sendScrollSpeed,
-    sendRotation
+    sendVibrate
 }
 
 /// <summary>Sent from client to server.</summary>
