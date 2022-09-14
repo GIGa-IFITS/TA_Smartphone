@@ -26,6 +26,12 @@ public class ClientHandle : MonoBehaviour
         string _msg = _packet.ReadString();
 
         Handheld.Vibrate();
+
+        if(_msg == "up"){
+            TouchDetector.instance.SetIsContentInPhone(false);
+        }else if(_msg == "down"){
+            TouchDetector.instance.SetIsContentInPhone(true);
+        }
     }
 
     public static void SwipeReceived(PacketNetwork _packet){

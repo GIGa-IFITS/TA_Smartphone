@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TouchDetector : MonoBehaviour
 {
+    public static TouchDetector instance;
     private Vector2 startPos;
     private Vector2 endPos;
     private float startTime;
@@ -16,6 +17,19 @@ public class TouchDetector : MonoBehaviour
     private float diffTime;
     private float speed;
     public bool isScrolling = false;
+
+     private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+        }
+    }
 
     void Update()
     {
@@ -83,18 +97,17 @@ public class TouchDetector : MonoBehaviour
         {
             Debug.Log("swipe up");
             ClientSend.SendSwipe("up");
-            Handheld.Vibrate();
-            isContentInPhone = false;
-            nextSwipe = Time.time + cooldownTime;
+            //Handheld.Vibrate();
+            //isContentInPhone = false;
         }
-        else if(_touch.endPos.y - _touch.startPos.y < -SWIPE_THRESHOLD && !isContentInPhone)//swipe down
-        {
-            Debug.Log("swipe down");
-            ClientSend.SendSwipe("down");
-            Handheld.Vibrate();
-            isContentInPhone = true;
-            nextSwipe = Time.time + cooldownTime;
-        }   
+        // else if(_touch.endPos.y - _touch.startPos.y < -SWIPE_THRESHOLD && !isContentInPhone)//swipe down
+        // {
+        //     Debug.Log("swipe down");
+        //     ClientSend.SendSwipe("down");
+        //     Handheld.Vibrate();
+        //     isContentInPhone = true;
+        //     nextSwipe = Time.time + cooldownTime;
+        // }   
     }
 
     private void CalculateScrollSpeed(float _distance, float _diffTime){
@@ -115,5 +128,10 @@ public class TouchDetector : MonoBehaviour
             ClientSend.SendTouch("touch");
         }
         isScrolling = false; 
+    }
+
+    public void SetIsContentInPhone(bool val){
+        isContentInPhone = val;
+        nextSwipe = Time.time + cooldownTime;
     }
 }

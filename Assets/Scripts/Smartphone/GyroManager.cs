@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GyroManager : MonoBehaviour
 {
     private Gyroscope gyro;
-    public Quaternion correctionQuaternion = Quaternion.Euler(90, 0, 0);
-    private Quaternion phoneRotation;
-    public bool useCorrection = true;
+    [SerializeField] private TextMeshProUGUI debugText;
 
     void Start()
     {
@@ -18,13 +17,8 @@ public class GyroManager : MonoBehaviour
     void Update()
     {
         Quaternion gyroQuaternion = GyroToUnity(Input.gyro.attitude);
-        //Debug.Log(gyroQuaternion);
-        if(useCorrection){
-            phoneRotation = correctionQuaternion * gyroQuaternion;
-        }else{
-            phoneRotation = gyroQuaternion;
-        }
-        ClientSend.SendRotation(phoneRotation.x, phoneRotation.y, phoneRotation.z, phoneRotation.w);
+        //debugText.text = gyroQuaternion.eulerAngles.x + " " + gyroQuaternion.eulerAngles.y + " "  + gyroQuaternion.eulerAngles.z;
+        ClientSend.SendRotation(gyroQuaternion.x, gyroQuaternion.y, gyroQuaternion.z, gyroQuaternion.w);
     }
 
     private static Quaternion GyroToUnity(Quaternion q)
