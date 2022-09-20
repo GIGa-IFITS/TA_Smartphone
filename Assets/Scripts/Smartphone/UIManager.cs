@@ -113,5 +113,6 @@ public class UIManager : MonoBehaviour {
         connectButton.GetComponent<Button>().interactable = true;
         ipField.interactable = true;
         isDisconnectButtonPressed = false;
+        TouchDetector.instance.SetIsContentInPhone(true);
     }
 }
